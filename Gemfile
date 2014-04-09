@@ -1,5 +1,6 @@
 # A sample Gemfile
 source "https://rubygems.org"
+ruby "2.0.0"
 
 gem 'sinatra', '~> 1.4.5'
 gem "activerecord"
@@ -8,4 +9,12 @@ gem "sinatra-activerecord"
 gem 'haml'
 gem 'sass'
 
-gem 'rerun', '~> 0.9.0'
+group :development do
+  gem 'rerun', '~> 0.9.0'
+  gem 'tux'
+  gem 'sqlite3'
+end
+
+group :production do
+  gem 'pg'
+end

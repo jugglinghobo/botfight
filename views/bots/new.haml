@@ -1,0 +1,10 @@
+%form{:action => "/bots/create", :method => "post", :id => "new_form"}
+  %ul
+    %li
+      %input{:type => "text", :name => "bot[author]", :placeholder => "Name", :id => "new_bot_author"}
+    %li
+      %textarea{:name => "bot[code]", :placeholder => "code", :id => "new_bot_code"}
+    %li
+      %input{:type => "submit", :value => "speichern", :class => "button", :id => "submit"}
+
+
