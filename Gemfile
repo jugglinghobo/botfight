@@ -6,6 +6,7 @@ gem 'sinatra', '~> 1.4.5'
 gem 'sinatra-contrib', '~> 1.4.2'
 gem "activerecord"
 gem "sinatra-activerecord"
+gem "rake"
 
 gem 'haml'
 gem 'sass'

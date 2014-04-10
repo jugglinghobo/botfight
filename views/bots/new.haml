@@ -1,7 +1,9 @@
 %form{:action => "/bots/create", :method => "post", :id => "new_form"}
   %ul
     %li
-      %input{:type => "text", :name => "bot[author]", :placeholder => "Name", :id => "new_bot_author"}
+      %input{:type => "text", :name => "bot[author]", :placeholder => "Author", :id => "new_bot_author"}
+    %li
+      %input{:type => "text", :name => "bot[name]", :placeholder => "Bot Name", :id => "new_bot_name"}
     %li
       %textarea{:name => "bot[code]", :placeholder => "code", :id => "new_bot_code"}
     %li
