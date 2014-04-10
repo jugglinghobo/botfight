@@ -1,6 +1,13 @@
 %script{:src => "/javascript/arena.js"}
 %script{:src => "/javascript/tile.js"}
+%script{:src => "/javascript/adjacent_tiles.js"}
 %script{:src => "/javascript/bot.js"}
+%script{:src => "/javascript/bot_behaviour.js"}
 %h1 arena
 
+%label.inline{:for => "add_bot"} add bot
+%select#add_bot.form-control.inline
+  %option{:value => ""}= ""
+  - @bots.each do |bot|
+    %option{:value => bot.id}= bot
 #arena

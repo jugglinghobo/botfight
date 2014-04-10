@@ -11,6 +11,7 @@ get "/" do
 end
 
 get "/arena" do
+  @bots = Bot.all
   haml :arena
 end
 
@@ -81,7 +82,7 @@ end
 class Bot < ActiveRecord::Base
 
   SKELETON_CODE = <<-END
-var move = function() {
+var action = function() {
   // implement this functionality...
 }
   END
