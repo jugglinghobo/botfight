@@ -1,0 +1,6 @@
+%h1 Hello World
+- @bots.each do |bot|
+  %a{:href => "/bots/#{bot.id}", :title => "bot #{bot.id}"}
+    = "Bot #{bot.id}"
+%a{:href => '/bots/new', :title => "bots"}
+  = "create new bot"
