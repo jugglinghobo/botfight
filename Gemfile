@@ -11,8 +11,6 @@ gem "rake"
 gem 'haml'
 gem 'sass'
 
-gem 'glorify', '~> 0.5.0'
-
 group :development do
   gem 'rerun', '~> 0.9.0'
   gem 'tux'
