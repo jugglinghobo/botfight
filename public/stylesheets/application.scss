@@ -2,6 +2,10 @@ body {
   padding-top: 50px;
 }
 
+label {
+  width: 60px;
+}
+
 #wrapper {
   width: 66%;
   margin: auto;
@@ -25,4 +29,8 @@ body {
       display: table-cell;
     }
   }
+}
+
+.inline {
+  display: inline-block;
 }

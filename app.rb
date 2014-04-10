@@ -14,9 +14,9 @@ get "/bots" do
   haml :"bots/index"
 end
 
-get "/bots/new" do
+get "/bots/form" do
   @bot = Bot.new
-  haml :"bots/new"
+  haml :"bots/form"
 end
 
 post "/bots/create" do
@@ -24,13 +24,36 @@ post "/bots/create" do
   if @bot.save
     redirect to "/bots/#{@bot.id}"
   else
-    haml :"bots/new"
+    haml :"bots/form"
   end
 end
 
 get "/bots/:id" do
   @bot = Bot.find params[:id]
   haml :"bots/show"
+end
+
+get "/bots/:id/edit" do
+  @bot = Bot.find params[:id]
+  haml :"bots/form"
+end
+
+post "/bots/:id/update" do
+  @bot = Bot.find params[:id]
+  if @bot.update_attributes params[:bot]
+    redirect to "/bots/#{@bot.id}"
+  else
+    haml :"bots/form"
+  end
+end
+
+post "/bots/:id/delete" do
+  @bot = Bot.find params[:id]
+  if @bot.destroy
+    redirect to "/bots"
+  else
+    redirect to "/show"
+  end
 end
 
 # sass stylesheet hack

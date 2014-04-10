@@ -5,12 +5,22 @@
     %meta{charset: "utf-8"}/
     %link{:href => "/stylesheets/reset.css", :rel => "stylesheet"}/
     %link{:href => "/stylesheets/bootstrap/bootstrap.min.css", :rel => "stylesheet"}/
+
+    %link{:href => "/stylesheets/codemirror/codemirror.css", :rel => "stylesheet"}/
+    %link{:href => "/stylesheets/codemirror/theme/ambiance.css", :rel => "stylesheet"}/
+
     %link{:href => "/stylesheets/application.css", :rel => "stylesheet"}/
     %link{:href => "/stylesheets/bots.css", :rel => "stylesheet"}/
 
     %script{:src => "http://code.jquery.com/jquery-1.10.2.min.js"}
     %script{:src => "/javascript/bootstrap/bootstrap.min.js"}
-    /%script{:src => "javascript/application.js"}
+
+    %script{:src => "/javascript/codemirror/codemirror.js"}
+    %script{:src => "/javascript/codemirror/mode/javascript/javascript.js"}
+    %script{:src => "/javascript/codemirror/keymap/vim.js"}
+
+    %script{:src => "/javascript/application.js"}
+    %script{:src => "/javascript/bots.js"}
 
 
   %body
@@ -29,9 +39,10 @@
                   - Bot.all.each do |bot|
                     %li
                       %a{:href => "/bots/#{bot.id}", :title => bot}= bot
-                  %li.divider
+                  - if Bot.all.any?
+                    %li.divider
                   %li
-                    %a{:href => "/bots/new", :title => "create new bot"}
+                    %a{:href => "/bots/form", :title => "create new bot"}
                       %span create new bot
       #content
         =yield
