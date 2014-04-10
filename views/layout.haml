@@ -29,11 +29,13 @@
         #navigation.navbar.navbar-fixed-top{:role => "navigation"}
           .container
             %ul.nav.navbar-nav
-              %li.active
-                %a{:href => "/", :title => "Home"} Home
+              %li
+                %a{:href => "/", :title => "home"} home
+              %li
+                %a{:href => "/arena", :title => "arena"} arena
               %li.dropdown
                 %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
-                  Bots
+                  bots
                   %b.caret
                 %ul.dropdown-menu
                   - Bot.all.each do |bot|

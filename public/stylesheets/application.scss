@@ -34,3 +34,13 @@ label {
 .inline {
   display: inline-block;
 }
+
+.code {
+  //white-space: pre;
+  display: inline-block;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 1px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+}

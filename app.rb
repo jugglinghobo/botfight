@@ -9,6 +9,10 @@ get "/" do
   redirect to "/bots"
 end
 
+get "/arena" do
+  haml "This does not exist yet"
+end
+
 get "/bots" do
   @bots = Bot.all
   haml :"bots/index"
@@ -65,9 +69,21 @@ get "/stylesheets/:stylesheet.css" do |stylesheet|
 end
 
 class Bot < ActiveRecord::Base
+
+  SKELETON_CODE = <<-END
+var move = function() {
+  // implement this functionality...
+}
+  END
+
   #name, code, author
   validates_presence_of :name, :author, :code
+
   def to_s
     name
+  end
+
+  def code
+    read_attribute(:code) || SKELETON_CODE
   end
 end

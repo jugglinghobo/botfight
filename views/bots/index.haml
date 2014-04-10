@@ -1,9 +1,24 @@
-%h1 existing bots
-- @bots.each do |bot|
-  %ul
-    %li
-      = ">"
-      %a{:href => "/bots/#{bot.id}", :title => bot}
-        = bot
-%a{:href => '/bots/form', :title => "create new bot"}
-  = "create new bot"
+%h1 BotFight
+
+%p
+  BotFight is a mix between programming challenge and strategy game.
+%p
+  You are to create a bot which responds to a fixed set of questions.
+  Your bot will then fight against others in the arena, for Glory and... Glory!
+
+%h3 how it works
+%p.inline
+  You start implementing a bot's function&nbsp;
+  .code
+    = "#move"
+  ="."
+  Your implementation can be very simple, for example:
+%p
+  .code
+    = "var move = function() {return 'hold';};"
+
+%p
+  The goal is for your bot to survive the longest.
+
+%h3 rules
+%p
