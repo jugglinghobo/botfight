@@ -5,16 +5,19 @@ $(document).ready(function() {
 var Bots = function() {
   var initCodeMirror = function() {
     var codeMirrorArea = document.getElementById("bot_code");
-    var data = $(codeMirrorArea).data();
+    if (codeMirrorArea) {
+      var data = $(codeMirrorArea).data();
+      var readOnly = data ? data["readonly"] : false
 
-    var options = {
-      keyMap: "vim",
-      theme: "ambiance",
-      lineNumbers: true,
-      mode: "javascript",
-      readOnly: (data["readonly"] || false),
-    };
-    var myCodeMirror = CodeMirror.fromTextArea(codeMirrorArea, options);
+      var options = {
+        keyMap: "vim",
+        theme: "ambiance",
+        lineNumbers: true,
+        mode: "javascript",
+        readOnly: readOnly,
+      };
+      var myCodeMirror = CodeMirror.fromTextArea(codeMirrorArea, options);
+    }
   };
 
   return {

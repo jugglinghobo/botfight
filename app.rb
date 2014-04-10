@@ -10,7 +10,7 @@ get "/" do
 end
 
 get "/arena" do
-  haml "This does not exist yet"
+  haml :arena
 end
 
 get "/bots" do

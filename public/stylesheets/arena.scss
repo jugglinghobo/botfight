@@ -1,0 +1,15 @@
+#arena {
+  display: table;
+  border-collapse: collapse;
+
+  .tile_row {
+    display: table-row;
+
+    .tile {
+      display: table-cell;
+      width: 20px;
+      height: 20px;
+      border: 1px solid black;
+    }
+  }
+}
