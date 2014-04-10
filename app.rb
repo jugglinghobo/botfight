@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'json'
 require './environment'
 
 require 'haml'
@@ -32,18 +33,23 @@ post "/bots/create" do
   end
 end
 
+get "/bots/:id.json" do
+  get_post
+  @bot.to_json
+end
+
 get "/bots/:id" do
-  @bot = Bot.find params[:id]
+  get_post
   haml :"bots/show"
 end
 
 get "/bots/:id/edit" do
-  @bot = Bot.find params[:id]
+  get_post
   haml :"bots/form"
 end
 
 post "/bots/:id/update" do
-  @bot = Bot.find params[:id]
+  get_post
   if @bot.update_attributes params[:bot]
     redirect to "/bots/#{@bot.id}"
   else
@@ -52,12 +58,16 @@ post "/bots/:id/update" do
 end
 
 post "/bots/:id/delete" do
-  @bot = Bot.find params[:id]
+  get_post
   if @bot.destroy
     redirect to "/bots"
   else
     redirect to "/show"
   end
+end
+
+def get_post
+  @bot = Bot.find params[:id]
 end
 
 # sass stylesheet hack

@@ -1,8 +1,8 @@
 $(document).ready(function() {
-  Bots.initialize();
+  BotForm.initialize();
 });
 
-var Bots = function() {
+var BotForm = function() {
   var initCodeMirror = function() {
     var codeMirrorArea = document.getElementById("bot_code");
     if (codeMirrorArea) {
