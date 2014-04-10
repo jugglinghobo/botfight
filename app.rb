@@ -15,12 +15,13 @@ get "/bots" do
 end
 
 get "/bots/new" do
+  @bot = Bot.new
   haml :"bots/new"
 end
 
 post "/bots/create" do
   @bot = Bot.new params[:bot]
-  if @bot.save!
+  if @bot.save
     redirect to "/bots/#{@bot.id}"
   else
     haml :"bots/new"
@@ -32,9 +33,18 @@ get "/bots/:id" do
   haml :"bots/show"
 end
 
+# sass stylesheet hack
+SASS_DIR = File.expand_path("../public/stylesheets", __FILE__)
+get "/stylesheets/:stylesheet.css" do |stylesheet|
+  content_type "text/css"
+  template = File.read(File.join(SASS_DIR, "#{stylesheet}.scss"))
+  scss template
+end
 
 class Bot < ActiveRecord::Base
-  #author: string
-  #name:   string
-  #code:   text
+  #name, code, author
+  validates_presence_of :name, :author, :code
+  def to_s
+    name
+  end
 end

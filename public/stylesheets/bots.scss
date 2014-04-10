@@ -1,0 +1,21 @@
+#new_bot_form {
+  ul {
+    li {
+      margin: 5px;
+    }
+  }
+
+  #new_bot_author, #new_bot_name {
+    width: 200px;
+  }
+
+  #new_bot_code {
+    height: 400px;
+  }
+}
+
+#bot {
+  .code {
+    white-space: pre-wrap;
+  }
+}

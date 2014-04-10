@@ -1,12 +1,14 @@
-%form{:action => "/bots/create", :method => "post", :id => "new_form"}
+%h1 create a new bot
+%form#new_bot_form{:action => "/bots/create", :method => "post"}
   %ul
     %li
-      %input{:type => "text", :name => "bot[author]", :placeholder => "Author", :id => "new_bot_author"}
+      %input#new_bot_name.form-control{:type => "text", :name => "bot[name]", :placeholder => "Bot Name", :value => @bot.name}
     %li
-      %input{:type => "text", :name => "bot[name]", :placeholder => "Bot Name", :id => "new_bot_name"}
+      %input#new_bot_author.form-control{:type => "text", :name => "bot[author]", :placeholder => "Author", :value => @bot.author}
     %li
-      %textarea{:name => "bot[code]", :placeholder => "code", :id => "new_bot_code"}
+      %textarea#new_bot_code.form-control{:name => "bot[code]", :placeholder => "code"}
+        = @bot.code
     %li
-      %input{:type => "submit", :value => "speichern", :class => "button", :id => "submit"}
+      %input.btn{:type => "submit", :value => "save"}
 
 

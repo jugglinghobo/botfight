@@ -1,0 +1,28 @@
+body {
+  padding-top: 50px;
+}
+
+#wrapper {
+  width: 66%;
+  margin: auto;
+}
+
+#navigation {
+
+  .container {
+    width: 66%;
+    margin: auto;
+    padding: 0;
+    border-bottom: 1px solid black;
+  }
+}
+
+.table {
+  display: table;
+  .row {
+    display: table-row;
+    .cell {
+      display: table-cell;
+    }
+  }
+}
