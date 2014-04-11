@@ -11,7 +11,9 @@ BotBehaviour.prototype.execute = function(action, direction) {
 BotBehaviour.prototype.move = function(direction) {
   var currentTile = this.bot.currentTile;
   var nextTile = currentTile[direction]();
-  currentTile.removeBot(this.bot);
-  nextTile.addBot(this.bot);
-  this.bot.currentTile = nextTile;
+  if (!nextTile.isOccupied()) {
+    currentTile.removeBot(this.bot);
+    nextTile.addBot(this.bot);
+    this.bot.currentTile = nextTile;
+  };
 };

@@ -72,8 +72,8 @@ Arena.prototype.inBounds = function(bounds, position) {
 };
 
 Arena.prototype.initGrid = function(width, height) {
-  this.width = width || 20;
-  this.height = height || 20;
+  this.width = width || 10;
+  this.height = height || 10;
   this.grid = [];
   for(var x = 0; x <= this.width; x++) {
     this.grid[x] = [];

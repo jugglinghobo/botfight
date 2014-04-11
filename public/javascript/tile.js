@@ -2,7 +2,6 @@ function Tile(arena, x, y) {
   this.arena = arena;
   this.x = x;
   this.y = y;
-  this.isOccupied = false;
   this.occupants = [];
   this.adjacentTiles = new AdjacentTiles(this);
 };
@@ -38,6 +37,10 @@ Tile.prototype.removeBot = function(bot) {
   this.occupants.splice(index, 1);
   var field = this.field();
   field.innerHTML = "";
+}
+
+Tile.prototype.isOccupied = function() {
+  return !(this.occupants.length == 0)
 }
 
 Tile.prototype.toHtml = function() {
