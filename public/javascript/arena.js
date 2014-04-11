@@ -17,6 +17,34 @@ Arena.prototype.initListeners = function() {
       arena.addBot(bot_id);
     };
   });
+
+  $("#start_game").on("click", function(e) {
+    e.preventDefault();
+    arena.startGame();
+  });
+};
+
+Arena.prototype.startGame = function() {
+  var fps = 50;
+  var arena = this;
+  arena.roundCounter = 0;
+  arena.maxRounds = 100;
+
+  arena.intervalId = setInterval(function() {
+    if (arena.roundCounter > arena.maxRounds) {
+      clearInterval(arena.intervalId);
+    };
+    arena.playRound();
+    arena.roundCounter += 1;
+  }, 10000/fps);
+};
+
+Arena.prototype.playRound = function() {
+  this.bots.forEach(function(bot) {
+    var directions = bot.behaviour.directions;
+    var random_dir = directions[Math.floor(Math.random()*directions.length)]
+    bot.action({"move": random_dir});
+  });
 };
 
 Arena.prototype.addBot = function(bot_id) {

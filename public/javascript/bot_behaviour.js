@@ -4,8 +4,8 @@ function BotBehaviour(bot) {
   this.directions = ["u", "d", "l", "r"];
 };
 
-BotBehaviour.prototype.execute = function(action_hash) {
-
+BotBehaviour.prototype.execute = function(action, direction) {
+  this[action](direction);
 };
 
 BotBehaviour.prototype.move = function(direction) {

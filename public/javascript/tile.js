@@ -34,7 +34,10 @@ Tile.prototype.addBot = function(bot) {
 }
 
 Tile.prototype.removeBot = function(bot) {
-  this.field.innerHTML = "";
+  var index = this.occupants.indexOf(bot);
+  this.occupants.splice(index, 1);
+  var field = this.field();
+  field.innerHTML = "";
 }
 
 Tile.prototype.toHtml = function() {

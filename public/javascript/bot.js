@@ -3,11 +3,11 @@ function Bot(arena, load_path) {
   this.load(load_path);
   this.behaviour = new BotBehaviour(this);
   this.setPosition();
-  console.log(this.currentTile);
 }
 
-Bot.prototype.move = function(direction) {
-  this.behaviour.move(direction);
+Bot.prototype.action = function(action_hash) {
+  var key = Object.keys(action_hash)[0];
+  this.behaviour.execute(key, action_hash[key]);
 }
 
 Bot.prototype.setPosition = function() {
