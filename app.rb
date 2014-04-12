@@ -110,4 +110,8 @@ var action = function(surroundings) {
   def code
     read_attribute(:code) || SKELETON_CODE
   end
+
+  def color
+    self.read_attribute("color") || "#%06x" % (rand * 0xffffff)
+  end
 end

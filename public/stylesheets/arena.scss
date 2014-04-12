@@ -30,10 +30,8 @@
     margin-bottom: 5px;
 
     .cell {
-      &.header {
-        text-align: left;
-        vertical-align: middle;
-      }
+      text-align: left;
+      vertical-align: middle;
 
       &.bot_actions {
         height: 20px;
@@ -46,7 +44,16 @@
     .toggle {
       display: none;
     }
+
     .detoggle {
+    }
+
+    .color_label {
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
     }
   }
 
