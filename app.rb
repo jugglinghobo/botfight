@@ -34,7 +34,7 @@ end
 post "/bots/create" do
   @bot = Bot.new params[:bot]
   if @bot.save
-    redirect to "/bots/#{@bot.id}"
+    redirect to "/bots/#{@bot.id}/edit"
   else
     haml :"bots/form"
   end

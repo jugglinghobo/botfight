@@ -67,7 +67,7 @@ Arena.prototype.startGame = function() {
   arena.roundCounter = 0;
   arena.maxRounds = 100;
   this.lastTime = 0;
-  this.activeBot = this.updateActiveBot();
+  this.updateActiveBot();
   this.run();
 };
 
@@ -91,15 +91,12 @@ Arena.prototype.run = function() {
 Arena.prototype.update = function() {
   if (this.activeBot.hasFinishedAction) {
     this.activeBot.hasFinishedAction = false;
-    this.activeBot = this.updateActiveBot();
+    this.updateActiveBot();
   };
   this.activeBot.action();
 };
 
 Arena.prototype.stopGame = function() {
-  if (this.bots.indexOf(this.activeBot) < 0) {
-    this.addToBots(this.activeBot);
-  };
   cancelAnimationFrame(this.requestId);
 }
 
@@ -108,7 +105,6 @@ Arena.prototype.render = function() {
   arena.context.clearRect(0,0,arena.canvas.width,arena.canvas.height);
   arena.renderGrid();
   arena.bots.forEach(function(bot) {
-    console.log(bot);
     bot.render(arena.context);
   });
 };
@@ -151,8 +147,9 @@ Arena.prototype.removeFromBots = function(bot) {
 
 Arena.prototype.updateActiveBot = function() {
   this.activeBot = this.bots.shift();
-  this.bots.push(this.activeBot);
-  if (!this.activeBot) {
+  if (this.activeBot) {
+    this.bots.push(this.activeBot);
+  } else {
     this.stopGame();
   }
   return this.activeBot;
