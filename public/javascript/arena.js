@@ -17,7 +17,7 @@ Arena.prototype.initListeners = function() {
   $("#add_bot").on("change", function() {
     var bot_id = $(this).val();
     if (bot_id != "") {
-      arena.addBot(bot_id);
+      arena.loadBot(bot_id);
     };
   });
 
@@ -42,6 +42,7 @@ Arena.prototype.startGame = function() {
   arena.roundCounter = 0;
   arena.maxRounds = 100;
   this.lastTime = 0;
+  this.activeBot = this.bots.shift();
   this.run();
 };
 
@@ -57,37 +58,47 @@ Arena.prototype.run = function() {
   setTimeout(function() {
     arena.requestId = requestAnimationFrame(arena.run.bind(arena));
 
-    arena.render();
     arena.update();
+    arena.render();
   }, 1000/arena.fps);
 }
 
-Arena.prototype.update = function(delta) {
+Arena.prototype.update = function() {
   if (this.activeBot.hasFinishedAction) {
-    this.bots.push(this.activeBot);
+    this.activeBot.hasFinishedAction = false;
+    this.addToBots(this.activeBot);
     this.activeBot = this.bots.shift();
   };
   this.activeBot.action();
 };
 
 Arena.prototype.stopGame = function() {
-  this.bots.push(this.activeBot);
+  if (this.bots.indexOf(this.activeBot) < 0) {
+    this.addToBots(this.activeBot);
+  };
   cancelAnimationFrame(this.requestId);
 }
 
 Arena.prototype.render = function() {
-  this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
-  this.renderGrid();
-  this.activeBot.render(this.context);
+  var arena = this;
+  arena.context.clearRect(0,0,arena.canvas.width,arena.canvas.height);
+  arena.renderGrid();
+  arena.bots.forEach(function(bot) {
+    bot.render(arena.context);
+  });
 };
 
 
-Arena.prototype.addBot = function(bot_id) {
+Arena.prototype.loadBot = function(bot_id) {
   var load_path = "/bots/"+bot_id+".json";
   var bot = new Bot(this, load_path);
-  this.activeBot = bot;
+  this.addToBots(bot);
   this.render();
   return bot;
+};
+
+Arena.prototype.addToBots = function(bot) {
+  this.bots.push(bot);
 };
 
 Arena.prototype.getRandomFreeTile = function() {
@@ -108,7 +119,7 @@ Arena.prototype.inBounds = function(bounds, position) {
   var maxBounds = this[bounds];
   if (position < 0) {
     return position + maxBounds;
-  } else if (position > maxBounds) {
+  } else if (position > maxBounds-1) {
     return position - maxBounds;
   } else {
     return position;

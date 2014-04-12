@@ -17,39 +17,65 @@ BotBehaviour.prototype.move = function(direction) {
   if (nextTile.isOccupied()) {
     this.bot.hasFinishedAction = true;
   } else {
-    this.moveTo(nextTile);
-    if (this.bot.positionX == nextTile.positionX && this.bot.positionY == nextTile.positionY) {
-      this.bot.hasFinishedAction = true;
+    // calls direction function
+    this[direction](nextTile);
+
+    if (this.bot.hasFinishedAction) {
+      this.bot.currentTile = nextTile;
       currentTile.removeBot(this.bot);
       nextTile.addBot(this.bot);
-      this.bot.currentTile = nextTile;
     };
   };
 };
 
-BotBehaviour.prototype.moveTo = function(nextTile) {
-  var movementX = (nextTile.positionX - this.bot.positionX);
-  var movementY = (nextTile.positionY - this.bot.positionY);
-  var newPositionX = this.bot.positionX;
-  var newPositionY = this.bot.positionY;
-  if (movementX > 0) {
-    newPositionX = (this.bot.positionX += this.stepSize) % this.maxWidth;
+BotBehaviour.prototype.up = function(nextTile) {
+  this.bot.positionY -= this.stepSize;
+  if (this.botReachedTile(nextTile)) {
+    this.bot.hasFinishedAction = true;
   }
-  if (movementX < 0) {
-    newPositionX = (this.bot.positionX -= this.stepSize) % this.maxWidth;
-  }
-  if (movementY > 0) {
-    newPositionY = (this.bot.positionY += this.stepSize) % this.maxWidth;
-  }
-  if (movementY < 0) {
-    newPositionY = (this.bot.positionY -= this.stepSize) % this.maxWidth;
-  }
-  this.bot.positionX = newPositionX;
-  this.bot.positionY = newPositionY;
+  if (this.bot.positionY < 0) {
+    this.bot.positionY += this.maxHeight;
+  };
+};
+
+BotBehaviour.prototype.down = function(nextTile) {
+  this.bot.positionY += this.stepSize;
+  if (this.botReachedTile(nextTile)) {
+    this.bot.hasFinishedAction = true;
+  };
+  if (this.bot.positionY > this.maxHeight) {
+    this.bot.positionY -= this.maxHeight;
+  };
+};
+
+BotBehaviour.prototype.left = function(nextTile) {
+  this.bot.positionX -= this.stepSize;
+  if (this.botReachedTile(nextTile)) {
+    this.bot.hasFinishedAction = true;
+  };
+  if (this.bot.positionX < 0) {
+    this.bot.positionX += this.maxWidth;
+  };
+};
+
+BotBehaviour.prototype.right = function(nextTile) {
+  this.bot.positionX += this.stepSize;
+  if (this.botReachedTile(nextTile)) {
+    this.bot.hasFinishedAction = true;
+  };
+  if (this.bot.positionX > this.maxWidth) {
+    this.bot.positionX -= this.maxWidth;
+  };
+};
+
+BotBehaviour.prototype.botReachedTile = function(tile) {
+  return ((tile.positionX-3 <= this.bot.positionX && tile.positionX+3 >= this.bot.positionX)
+      && (tile.positionY-3 <= this.bot.positionY && tile.positionY+3 >= this.bot.positionY))
 }
+
 
 BotBehaviour.prototype.attack = function(direction) {
   var currentTile = this.bot.currentTile;
   var nextTile = currentTile[direction]();
   nextTile.dealDamage();
-}
+};

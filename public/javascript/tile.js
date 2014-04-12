@@ -10,10 +10,6 @@ function Tile(arena, x, y, tileSize) {
   this.adjacentTiles = new AdjacentTiles(this);
 };
 
-Tile.prototype.domElement = function() {
-  return document.getElementById("x_"+this.x+"_y_"+this.y+"");
-}
-
 Tile.prototype.surroundings = function() {
   return {"up": this.up(), "down": this.down(), "left": this.left(), "right": this.right()};
 }

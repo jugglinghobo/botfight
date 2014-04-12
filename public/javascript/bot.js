@@ -15,6 +15,8 @@ function Bot(arena, load_path) {
   this.positionX = this.currentTile.positionX;
   this.positionY = this.currentTile.positionY;
   this.offset = 2;
+  this.width = this.currentTile.width - this.offset;
+  this.height = this.currentTile.height - this.offset;
 }
 
 Bot.prototype.action = function() {
@@ -32,10 +34,9 @@ Bot.prototype.render = function(context) {
   icon.onload = function() {
     context.drawImage(icon, bot.positionX + bot.offset, bot.positionY + bot.offset);
   }
-}
-
-Bot.prototype.domElement = function() {
-  return document.getElementById("bot_"+this.id);
+  var direction = this.brain.action(this.currentTile.surroundings())["direction"];
+  var nextTile = this.currentTile[direction]();
+  context.strokeRect(nextTile.positionX+5, nextTile.positionY+5, 5, 5);
 }
 
 Bot.prototype.load = function(load_path) {
