@@ -1,11 +1,11 @@
-function Tile(arena, x, y) {
+function Tile(arena, x, y, tileSize) {
   this.arena = arena;
-  this.width = 20;
-  this.height = 20;
   this.x = x;
   this.y = y;
-  this.width = 20;
-  this.height = 20;
+  this.positionX = x*tileSize;
+  this.positionY = y*tileSize;
+  this.width = tileSize;
+  this.height = tileSize;
   this.occupant = null;
   this.adjacentTiles = new AdjacentTiles(this);
 };
@@ -19,19 +19,19 @@ Tile.prototype.surroundings = function() {
 }
 
 Tile.prototype.up = function() {
-  return this.adjacentTiles.u();
+  return this.adjacentTiles.up();
 }
 
 Tile.prototype.down = function() {
-  return this.adjacentTiles.d();
+  return this.adjacentTiles.down();
 }
 
 Tile.prototype.left = function() {
-  return this.adjacentTiles.l();
+  return this.adjacentTiles.left();
 }
 
 Tile.prototype.right = function() {
-  return this.adjacentTiles.r();
+  return this.adjacentTiles.right();
 }
 
 Tile.prototype.addBot = function(bot) {
@@ -51,19 +51,9 @@ Tile.prototype.isOccupied = function() {
   return !!(this.occupant);
 }
 
-Tile.prototype.draw = function(context) {
-  context.strokeRect(this.x, this.y, this.width, this.height);
+Tile.prototype.render = function(context) {
+  context.strokeRect(this.positionX, this.positionY, this.width, this.height);
   if (this.isOccupied()) {
-    this.occupant.draw(context);
+    this.occupant.render(context);
   }
 }
-
-Tile.prototype.toHtml = function() {
-  var string = "<div id='x_"+this.x+"_y_"+this.y+"' class='tile'>";
-  if (this.isOccupied()) {
-    string += this.occupant.toHtml();
-  }
-  string += "</div>";
-  return string;
-}
-

@@ -12,6 +12,8 @@ function Bot(arena, load_path) {
   this.behaviour = new BotBehaviour(this);
   this.currentTile = this.arena.getRandomFreeTile();
   this.currentTile.addBot(this);
+  this.positionX = this.currentTile.positionX;
+  this.positionY = this.currentTile.positionY;
   this.offset = 2;
 }
 
@@ -23,24 +25,13 @@ Bot.prototype.action = function() {
   this.behaviour.execute(action, direction);
 }
 
-Bot.prototype.draw = function(context) {
+Bot.prototype.render = function(context) {
   var bot = this;
   var icon = new Image();
-  icon.src= "images/robot.png";
+  icon.src = "images/robot.png";
   icon.onload = function() {
-    context.drawImage(icon, bot.x(), bot.y());
+    context.drawImage(icon, bot.positionX + bot.offset, bot.positionY + bot.offset);
   }
-}
-
-var drawImage = function(context, icon, x, y) {
-}
-
-Bot.prototype.x = function() {
-  return (this.currentTile.x + this.offset);
-}
-
-Bot.prototype.y = function() {
-  return (this.currentTile.y + this.offset);
 }
 
 Bot.prototype.domElement = function() {
@@ -57,8 +48,4 @@ Bot.prototype.load = function(load_path) {
     data = response;
   });
   return data;
-};
-
-Bot.prototype.toHtml = function() {
-  return "<div id='bot_"+this.id+"' class='bot'></div>"
 };

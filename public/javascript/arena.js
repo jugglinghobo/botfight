@@ -2,13 +2,14 @@ $(document).ready(function() {
   var arena = new Arena();
 });
 
-function Arena(width, height) {
-  this.initListeners();
+function Arena(width, height, tileSize) {
   this.width = width || 10;
   this.height = height || 10;
+  this.tileSize = tileSize || 20;
   this.bots = [];
   this.grid = [];
   this.initGrid();
+  this.initListeners();
 };
 
 Arena.prototype.initListeners = function() {
@@ -36,39 +37,56 @@ Arena.prototype.initListeners = function() {
 };
 
 Arena.prototype.startGame = function() {
-  var fps = 50;
+  var fps = 4;
   var arena = this;
   arena.roundCounter = 0;
   arena.maxRounds = 100;
-  this.lastTime;
+  this.lastTime = 0;
   this.run();
 };
 
-Arena.prototype.run = function() {
-  var now = Date.now();
-  var dt = (now - lastTime) / 1000.0;
-
-  this.playRound(dt);
-  this.draw();
-  lastTime = now;
-  requestAnimationFrame(this.run.bind(this));
+function draw() {
+    setTimeout(function() {
+        requestAnimationFrame(draw);
+        // Drawing code goes here
+    }, 1000 / fps);
 }
 
-Arena.prototype.playRound = function(delta) {
-  this.bots.forEach(function(bot) {
-    bot.action();
-  });
+Arena.prototype.run = function() {
+  var arena = this;
+  setTimeout(function() {
+    arena.requestId = requestAnimationFrame(arena.run.bind(arena));
+
+    arena.render();
+    arena.update();
+  }, 1000/arena.fps);
+}
+
+Arena.prototype.update = function(delta) {
+  if (this.activeBot.hasFinishedAction) {
+    this.bots.push(this.activeBot);
+    this.activeBot = this.bots.shift();
+  };
+  this.activeBot.action();
 };
 
 Arena.prototype.stopGame = function() {
-  clearInterval(this.intervalId);
+  this.bots.push(this.activeBot);
+  cancelAnimationFrame(this.requestId);
 }
+
+Arena.prototype.render = function() {
+  this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
+  this.renderGrid();
+  this.activeBot.render(this.context);
+};
+
 
 Arena.prototype.addBot = function(bot_id) {
   var load_path = "/bots/"+bot_id+".json";
   var bot = new Bot(this, load_path);
-  this.bots.push(bot);
-  this.draw();
+  this.activeBot = bot;
+  this.render();
   return bot;
 };
 
@@ -82,59 +100,43 @@ Arena.prototype.getRandomFreeTile = function() {
 
 Arena.prototype.getRandomTile = function() {
   var x = getRandomInt(0, this.width);
-  var y = getRandomInt(0, this.height);
+  var y = getRandomInt(0, this.width);
   return this.grid[x][y];
 }
 
 Arena.prototype.inBounds = function(bounds, position) {
   var maxBounds = this[bounds];
   if (position < 0) {
-    return position + maxBounds + 1;
+    return position + maxBounds;
   } else if (position > maxBounds) {
-    return position - maxBounds - 1;
+    return position - maxBounds;
   } else {
     return position;
   };
 };
 
 Arena.prototype.initGrid = function() {
-  var tileSize = 20;
-  for(var y = 0; y <= this.width; y++) {
-    this.grid[y] = [];
-    for (var x = 0; x <= this.height; x++) {
-      // inverted for correct x/y layout
-      var tileX = y*tileSize;
-      var tileY = x*tileSize;
-      var tile = new Tile(this, tileX, tileY);
-      this.grid[y][x] = tile;
+  for(var x = 0; x < this.width; x++) {
+    this.grid[x] = [];
+    for (var y = 0; y < this.height; y++) {
+      var tile = new Tile(this, x, y, this.tileSize);
+      this.grid[x][y] = tile;
     };
   };
-  var canvas = this.getCanvas();
-  this.context = canvas.getContext("2d");
-  canvas.width = this.width*tileSize;
-  canvas.height = this.height*tileSize;
-  this.draw();
+  this.canvas = this.getCanvas();
+  this.context = this.canvas.getContext("2d");
+  this.canvas.width = this.grid.length*this.tileSize;
+  this.canvas.height = this.grid.length*this.tileSize;
+  this.renderGrid();
 };
 
-Arena.prototype.draw = function() {
+Arena.prototype.renderGrid = function() {
   var arena = this;
   this.grid.forEach(function(row) {
     row.forEach(function(tile) {
-      tile.draw(arena.context);
+      tile.render(arena.context);
     });
   });
-};
-
-Arena.prototype.toHtml = function() {
-  var string = "";
-  this.grid.forEach(function(row) {
-    string += "<div class='tile_row'>"
-    row.forEach(function(tile) {
-      string += tile.toHtml();
-    });
-    string += "</div>"
-  });
-  return string;
 };
 
 Arena.prototype.getCanvas = function() {
