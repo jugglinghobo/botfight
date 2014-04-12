@@ -119,7 +119,6 @@ Arena.prototype.loadBot = function(bot_id) {
 };
 
 Arena.prototype.removeBot = function(bot_id) {
-  debugger;
   var bot = $.grep(this.bots, function(b){ return b.id == bot_id; })[0];
   if (bot) {
     bot.currentTile.removeBot(bot);

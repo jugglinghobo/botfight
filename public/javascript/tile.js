@@ -38,9 +38,8 @@ Tile.prototype.removeBot = function(bot) {
   this.occupant = null;
 }
 
-Tile.prototype.dealDamage = function() {
-  var field = this.domElement();
-  $(field).addClass("explosion");
+Tile.prototype.dealDamage = function(damage) {
+  this.occupant.takeDamage(damage);
 }
 
 Tile.prototype.isOccupied = function() {

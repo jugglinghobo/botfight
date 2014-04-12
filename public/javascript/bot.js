@@ -6,6 +6,8 @@ function Bot(arena, load_path) {
   this.name = data.name;
   this.author = data.author;
   this.code = data.code;
+  this.icon = new Image();
+  this.icon.src = "images/arrow.jpeg";
 
 
   this.brain = new BotBrain(this.code);
@@ -17,6 +19,7 @@ function Bot(arena, load_path) {
   this.offset = 2;
   this.width = this.currentTile.width - this.offset;
   this.height = this.currentTile.height - this.offset;
+  this.action();
 }
 
 Bot.prototype.action = function() {
@@ -27,16 +30,14 @@ Bot.prototype.action = function() {
   this.behaviour.execute(action, direction);
 }
 
+Bot.prototype.takeDamage = function(damage) {
+  console.log("++++++++++++++++++++++++++++");
+  console.log(""+this.name+": "+damage+" DAMAGE!");
+  console.log("++++++++++++++++++++++++++++")
+}
+
 Bot.prototype.render = function(context) {
-  var bot = this;
-  var icon = new Image();
-  icon.src = "images/robot.png";
-  icon.onload = function() {
-    context.drawImage(icon, bot.positionX + bot.offset, bot.positionY + bot.offset);
-  }
-  var direction = this.brain.action(this.currentTile.surroundings())["direction"];
-  var nextTile = this.currentTile[direction]();
-  context.strokeRect(nextTile.positionX+5, nextTile.positionY+5, 5, 5);
+  this.behaviour.render(context)
 }
 
 Bot.prototype.load = function(load_path) {
