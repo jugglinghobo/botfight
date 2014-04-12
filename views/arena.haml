@@ -1,3 +1,4 @@
+%script{:src => "/javascript/set_animation_frame.js"}
 %script{:src => "/javascript/arena.js"}
 %script{:src => "/javascript/tile.js"}
 %script{:src => "/javascript/adjacent_tiles.js"}
@@ -6,10 +7,10 @@
 %script{:src => "/javascript/bot_brain.js"}
 %h1 arena
 
-%label.inline{:for => "add_bot"} add bot
 %select#add_bot.form-control.inline
-  %option{:value => ""}= ""
+  %option{:value => ""}= "add bot"
   - @bots.each do |bot|
     %option{:value => bot.id}= bot
 %a#start_game.btn.btn-success{:href => "#", :title => "start game"} start game
+%a#stop_game.btn.btn-danger{:href => "#", :title => "stop game"} stop game
 #arena

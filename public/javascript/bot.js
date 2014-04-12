@@ -10,7 +10,7 @@ function Bot(arena, load_path) {
 
   this.brain = new BotBrain(this.code);
   this.behaviour = new BotBehaviour(this);
-  this.currentTile = this.arena.getRandomTile();
+  this.currentTile = this.arena.getRandomFreeTile();
   this.currentTile.addBot(this);
 }
 
@@ -20,6 +20,10 @@ Bot.prototype.action = function() {
   var action = chosenAction["action"];
   var direction = chosenAction["direction"];
   this.behaviour.execute(action, direction);
+}
+
+Bot.prototype.domElement = function() {
+  return document.getElementById("bot_"+this.id);
 }
 
 Bot.prototype.load = function(load_path) {
@@ -35,5 +39,5 @@ Bot.prototype.load = function(load_path) {
 };
 
 Bot.prototype.toHtml = function() {
-  return "<div id='#bot_"+this.id+"' class='bot'></div>"
+  return "<div id='bot_"+this.id+"' class='bot'></div>"
 };

@@ -1,7 +1,7 @@
 function BotBehaviour(bot) {
   this.bot = bot;
   this.actions = ["move"];
-  this.directions = ["u", "d", "l", "r"];
+  this.directions = ["up", "down", "left", "right"];
 };
 
 BotBehaviour.prototype.execute = function(action, direction) {
@@ -9,15 +9,22 @@ BotBehaviour.prototype.execute = function(action, direction) {
 };
 
 BotBehaviour.prototype.move = function(direction) {
-  var currentTile = this.bot.currentTile;
+  var bot = this.bot;
+  var currentTile = bot.currentTile;
   var nextTile = currentTile[direction]();
   if (!nextTile.isOccupied()) {
-    currentTile.removeBot(this.bot);
-    nextTile.addBot(this.bot);
-    this.bot.currentTile = nextTile;
+    var animation = {};
+    animation[direction] = '20px';
+    $(bot.domElement()).animate(animation, function() {
+      currentTile.removeBot(bot);
+      nextTile.addBot(bot);
+      bot.currentTile = nextTile;
+    });
   };
 };
 
 BotBehaviour.prototype.attack = function(direction) {
-
+  var currentTile = this.bot.currentTile;
+  var nextTile = currentTile[direction]();
+  nextTile.dealDamage();
 }

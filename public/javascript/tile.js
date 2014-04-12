@@ -6,40 +6,41 @@ function Tile(arena, x, y) {
   this.adjacentTiles = new AdjacentTiles(this);
 };
 
-Tile.prototype.field = function() {
+Tile.prototype.domElement = function() {
   return document.getElementById("x_"+this.x+"_y_"+this.y+"");
 }
 
 Tile.prototype.surroundings = function() {
-  return {"up": this.u(), "down": this.d(), "left": this.l(), "right": this.r()};
+  return {"up": this.up(), "down": this.down(), "left": this.left(), "right": this.right()};
 }
 
-Tile.prototype.u = function() {
+Tile.prototype.up = function() {
   return this.adjacentTiles.u();
 }
 
-Tile.prototype.d = function() {
+Tile.prototype.down = function() {
   return this.adjacentTiles.d();
 }
 
-Tile.prototype.l = function() {
+Tile.prototype.left = function() {
   return this.adjacentTiles.l();
 }
 
-Tile.prototype.r = function() {
+Tile.prototype.right = function() {
   return this.adjacentTiles.r();
 }
 
 Tile.prototype.addBot = function(bot) {
   this.occupant = bot;
-  var field = this.field();
-  field.outerHTML = this.toHtml();
 }
 
 Tile.prototype.removeBot = function(bot) {
   this.occupant = null;
-  var field = this.field();
-  field.innerHTML = "";
+}
+
+Tile.prototype.dealDamage = function() {
+  var field = this.domElement();
+  $(field).addClass("explosion");
 }
 
 Tile.prototype.isOccupied = function() {

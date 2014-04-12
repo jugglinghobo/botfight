@@ -1,16 +1,14 @@
 $(document).ready(function() {
   var arena = new Arena();
-  arena.draw();
 });
 
 function Arena(width, height) {
   this.initListeners();
-
   this.width = width || 10;
   this.height = height || 10;
-  this.grid = [];
-  this.initGrid(width, height);
   this.bots = [];
+  this.grid = [];
+  this.drawGrid();
 };
 
 Arena.prototype.initListeners = function() {
@@ -25,6 +23,15 @@ Arena.prototype.initListeners = function() {
   $("#start_game").on("click", function(e) {
     e.preventDefault();
     arena.startGame();
+    $(this).css("display", "none");
+    $("#stop_game").css("display", "inline-block");
+  });
+
+  $("#stop_game").on("click", function(e) {
+    e.preventDefault();
+    arena.stopGame();
+    $(this).css("display", "none");
+    $("#start_game").css("display", "inline-block");
   });
 };
 
@@ -33,36 +40,46 @@ Arena.prototype.startGame = function() {
   var arena = this;
   arena.roundCounter = 0;
   arena.maxRounds = 100;
-
-  arena.intervalId = setInterval(function() {
-    if (arena.roundCounter > arena.maxRounds) {
-      clearInterval(arena.intervalId);
-    };
-    arena.playRound();
-    arena.roundCounter += 1;
-  }, 10000/fps);
+  this.run();
 };
+
+Arena.prototype.run = function() {
+  this.playRound();
+  this.draw();
+  requestAnimationFrame(this.run.bind(this));
+}
 
 Arena.prototype.playRound = function() {
   this.bots.forEach(function(bot) {
-    var directions = bot.behaviour.directions;
-    var random_dir = directions[Math.floor(Math.random()*directions.length)]
-    bot.action({"move": random_dir});
+    bot.action();
   });
 };
+
+Arena.prototype.stopGame = function() {
+  clearInterval(this.intervalId);
+}
 
 Arena.prototype.addBot = function(bot_id) {
   var load_path = "/bots/"+bot_id+".json";
   var bot = new Bot(this, load_path);
   this.bots.push(bot);
+  this.draw();
   return bot;
+};
+
+Arena.prototype.getRandomFreeTile = function() {
+  var tile = this.getRandomTile();
+  while (tile.isOccupied()) {
+    tile = this.getRandomTile();
+  }
+  return tile;
 };
 
 Arena.prototype.getRandomTile = function() {
   var x = getRandomInt(0, this.width);
   var y = getRandomInt(0, this.height);
   return this.grid[x][y];
-};
+}
 
 Arena.prototype.inBounds = function(bounds, position) {
   var maxBounds = this[bounds];
@@ -75,7 +92,7 @@ Arena.prototype.inBounds = function(bounds, position) {
   };
 };
 
-Arena.prototype.initGrid = function(width, height) {
+Arena.prototype.drawGrid = function() {
   for(var y = 0; y <= this.width; y++) {
     this.grid[y] = [];
     for (var x = 0; x <= this.height; x++) {
@@ -83,6 +100,7 @@ Arena.prototype.initGrid = function(width, height) {
       this.grid[y][x] = tile;
     };
   };
+  this.draw();
 };
 
 Arena.prototype.draw = function() {
