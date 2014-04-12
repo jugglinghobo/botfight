@@ -1,7 +1,11 @@
 function Tile(arena, x, y) {
   this.arena = arena;
+  this.width = 20;
+  this.height = 20;
   this.x = x;
   this.y = y;
+  this.width = 20;
+  this.height = 20;
   this.occupant = null;
   this.adjacentTiles = new AdjacentTiles(this);
 };
@@ -45,6 +49,13 @@ Tile.prototype.dealDamage = function() {
 
 Tile.prototype.isOccupied = function() {
   return !!(this.occupant);
+}
+
+Tile.prototype.draw = function(context) {
+  context.strokeRect(this.x, this.y, this.width, this.height);
+  if (this.isOccupied()) {
+    this.occupant.draw(context);
+  }
 }
 
 Tile.prototype.toHtml = function() {

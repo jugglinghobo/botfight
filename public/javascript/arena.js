@@ -8,7 +8,7 @@ function Arena(width, height) {
   this.height = height || 10;
   this.bots = [];
   this.grid = [];
-  this.drawGrid();
+  this.initGrid();
 };
 
 Arena.prototype.initListeners = function() {
@@ -40,16 +40,21 @@ Arena.prototype.startGame = function() {
   var arena = this;
   arena.roundCounter = 0;
   arena.maxRounds = 100;
+  this.lastTime;
   this.run();
 };
 
 Arena.prototype.run = function() {
-  this.playRound();
+  var now = Date.now();
+  var dt = (now - lastTime) / 1000.0;
+
+  this.playRound(dt);
   this.draw();
+  lastTime = now;
   requestAnimationFrame(this.run.bind(this));
 }
 
-Arena.prototype.playRound = function() {
+Arena.prototype.playRound = function(delta) {
   this.bots.forEach(function(bot) {
     bot.action();
   });
@@ -92,20 +97,32 @@ Arena.prototype.inBounds = function(bounds, position) {
   };
 };
 
-Arena.prototype.drawGrid = function() {
+Arena.prototype.initGrid = function() {
+  var tileSize = 20;
   for(var y = 0; y <= this.width; y++) {
     this.grid[y] = [];
     for (var x = 0; x <= this.height; x++) {
-      var tile = new Tile(this, y, x);
+      // inverted for correct x/y layout
+      var tileX = y*tileSize;
+      var tileY = x*tileSize;
+      var tile = new Tile(this, tileX, tileY);
       this.grid[y][x] = tile;
     };
   };
+  var canvas = this.getCanvas();
+  this.context = canvas.getContext("2d");
+  canvas.width = this.width*tileSize;
+  canvas.height = this.height*tileSize;
   this.draw();
 };
 
 Arena.prototype.draw = function() {
-  var container = document.getElementById("arena");
-  container.innerHTML = this.toHtml();
+  var arena = this;
+  this.grid.forEach(function(row) {
+    row.forEach(function(tile) {
+      tile.draw(arena.context);
+    });
+  });
 };
 
 Arena.prototype.toHtml = function() {
@@ -119,6 +136,10 @@ Arena.prototype.toHtml = function() {
   });
   return string;
 };
+
+Arena.prototype.getCanvas = function() {
+  return document.getElementById("arena");
+}
 
 /**
  * Returns a random integer between min and max

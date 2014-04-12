@@ -12,6 +12,7 @@ function Bot(arena, load_path) {
   this.behaviour = new BotBehaviour(this);
   this.currentTile = this.arena.getRandomFreeTile();
   this.currentTile.addBot(this);
+  this.offset = 2;
 }
 
 Bot.prototype.action = function() {
@@ -20,6 +21,26 @@ Bot.prototype.action = function() {
   var action = chosenAction["action"];
   var direction = chosenAction["direction"];
   this.behaviour.execute(action, direction);
+}
+
+Bot.prototype.draw = function(context) {
+  var bot = this;
+  var icon = new Image();
+  icon.src= "images/robot.png";
+  icon.onload = function() {
+    context.drawImage(icon, bot.x(), bot.y());
+  }
+}
+
+var drawImage = function(context, icon, x, y) {
+}
+
+Bot.prototype.x = function() {
+  return (this.currentTile.x + this.offset);
+}
+
+Bot.prototype.y = function() {
+  return (this.currentTile.y + this.offset);
 }
 
 Bot.prototype.domElement = function() {
