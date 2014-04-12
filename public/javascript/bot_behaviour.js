@@ -22,6 +22,8 @@ BotBehaviour.prototype.move = function(direction) {
 
     if (this.bot.hasFinishedAction) {
       this.bot.currentTile = nextTile;
+      this.bot.positionX = this.bot.currentTile.positionX;
+      this.bot.positionY = this.bot.currentTile.positionY;
       currentTile.removeBot(this.bot);
       nextTile.addBot(this.bot);
     };

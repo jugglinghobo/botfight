@@ -39,6 +39,19 @@ Bot.prototype.render = function(context) {
   context.strokeRect(nextTile.positionX+5, nextTile.positionY+5, 5, 5);
 }
 
+Bot.prototype.toHtml = function() {
+  var html = "<div id='bot_"+this.id+"'>";
+  html +=      "<ul>";
+  html +=        "<li>";
+  html +=          "<h3>"+this.author+"</h3>";
+  html +=        "</li>";
+  html +=        "<li>";
+  html +=          "<textarea class='bot_code' data-readonly='nocursor'>"+this.code+"</textarea>";
+  html +=        "</li>";
+  html +=      "</ul>";
+  html +=    "</div>";
+}
+
 Bot.prototype.load = function(load_path) {
   var data;
   $.ajax({

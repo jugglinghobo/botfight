@@ -8,7 +8,11 @@ require 'haml'
 require 'sass'
 
 get "/" do
-  redirect to "/bots"
+  redirect to "/arena"
+end
+
+get "/about" do
+  render :about
 end
 
 get "/arena" do
@@ -39,11 +43,6 @@ end
 get "/bots/:id.json" do
   get_post
   @bot.to_json
-end
-
-get "/bots/:id" do
-  get_post
-  haml :"bots/show"
 end
 
 get "/bots/:id/edit" do

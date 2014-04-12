@@ -22,7 +22,7 @@
     %script{:src => "/javascript/codemirror/keymap/vim.js"}
 
     %script{:src => "/javascript/application.js"}
-    %script{:src => "/javascript/bot_form.js"}
+    %script{:src => "/javascript/code_editor.js"}
 
   %body
     #wrapper
@@ -30,8 +30,6 @@
         #navigation.navbar.navbar-fixed-top{:role => "navigation"}
           .container
             %ul.nav.navbar-nav
-              %li
-                %a{:href => "/", :title => "home"} home
               %li
                 %a{:href => "/arena", :title => "arena"} arena
               %li.dropdown
@@ -41,12 +39,14 @@
                 %ul.dropdown-menu
                   - Bot.all.each do |bot|
                     %li
-                      %a{:href => "/bots/#{bot.id}", :title => bot}= bot
+                      %a{:href => "/bots/#{bot.id}/edit", :title => bot}= bot
                   - if Bot.all.any?
                     %li.divider
                   %li
                     %a{:href => "/bots/form", :title => "create new bot"}
                       %span create new bot
+              %li
+                %a{:href => "/about", :title => "about"} about
       #content
         =yield
 

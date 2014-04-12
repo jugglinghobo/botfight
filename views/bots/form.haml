@@ -9,14 +9,14 @@
   %ul
     %li
       %label.inline{:for => "bot_name"} name:
-      %input#bot_name.inline.form-control{:type => "text", :name => "bot[name]", :value => @bot.name}
+      %input.bot_name.inline.form-control{:type => "text", :name => "bot[name]", :value => @bot.name}
     %li
       %label.inline{:for => "bot_author"} author:
-      %input#bot_author.inline.form-control{:type => "text", :name => "bot[author]", :value => @bot.author}
+      %input.bot_author.inline.form-control{:type => "text", :name => "bot[author]", :value => @bot.author}
     %li
-      %textarea#bot_code.inline.form-control{:name => "bot[code]"}= @bot.code
+      %textarea.bot_code.inline.form-control{:name => "bot[code]"}= @bot.code
     %li
       .pull-right
         %input.btn.btn-success{:type => "submit", :value => "save"}
-        %a.btn.btn-danger{:href => "/bots/#{@bot.id}", :onclick => "javascript:if(confirm('input will not be saved. proceed?')) {window.history.back(-1);return false;}", :title => "cancel"} cancel
+        %a.btn.btn-danger{:href => "/arena", :onclick => "javascript:if(confirm('input will not be saved. proceed?')) {window.history.back(-1);return false;}", :title => "cancel"} cancel
 
