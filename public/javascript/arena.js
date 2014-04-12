@@ -5,6 +5,10 @@ $(document).ready(function() {
 
 function Arena(width, height) {
   this.initListeners();
+
+  this.width = width || 10;
+  this.height = height || 10;
+  this.grid = [];
   this.initGrid(width, height);
   this.bots = [];
 };
@@ -72,17 +76,15 @@ Arena.prototype.inBounds = function(bounds, position) {
 };
 
 Arena.prototype.initGrid = function(width, height) {
-  this.width = width || 10;
-  this.height = height || 10;
-  this.grid = [];
-  for(var x = 0; x <= this.width; x++) {
-    this.grid[x] = [];
-    for (var y = 0; y <= this.height; y++) {
-      var tile = new Tile(this, x, y);
-      this.grid[x][y] = tile;
+  for(var y = 0; y <= this.width; y++) {
+    this.grid[y] = [];
+    for (var x = 0; x <= this.height; x++) {
+      var tile = new Tile(this, y, x);
+      this.grid[y][x] = tile;
     };
   };
 };
+
 Arena.prototype.draw = function() {
   var container = document.getElementById("arena");
   container.innerHTML = this.toHtml();
@@ -90,9 +92,9 @@ Arena.prototype.draw = function() {
 
 Arena.prototype.toHtml = function() {
   var string = "";
-  this.grid.forEach(function(column) {
+  this.grid.forEach(function(row) {
     string += "<div class='tile_row'>"
-    column.forEach(function(tile) {
+    row.forEach(function(tile) {
       string += tile.toHtml();
     });
     string += "</div>"

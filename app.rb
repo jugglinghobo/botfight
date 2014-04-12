@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require 'json'
 require './environment'
 
+require 'glorify'
 require 'haml'
 require 'sass'
 
@@ -17,7 +18,8 @@ end
 
 get "/bots" do
   @bots = Bot.all
-  haml :"bots/index"
+  @content = File.open("#{File.dirname(__FILE__)}/views/index.md", "rb").read
+  haml :index
 end
 
 get "/bots/form" do
@@ -82,7 +84,14 @@ end
 class Bot < ActiveRecord::Base
 
   SKELETON_CODE = <<-END
-var action = function() {
+// Bots have three possible actions. One of those can be executed every turn.
+// move:   [up, down, left, right] return {"move": "u"}; // move up
+// attack: [up, down, left, right] return {"attack": "l"}; // attack to left
+// clone:  [up, down, left, right] return {"clone": "d"}; // insert clone below
+//
+// you can inspect your surroundings, which is a 3x3 array
+
+var action = function(surroundings) {
   // implement this functionality...
 }
   END

@@ -17,3 +17,7 @@ BotBehaviour.prototype.move = function(direction) {
     this.bot.currentTile = nextTile;
   };
 };
+
+BotBehaviour.prototype.attack = function(direction) {
+
+}

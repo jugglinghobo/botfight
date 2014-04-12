@@ -2,12 +2,16 @@ function Tile(arena, x, y) {
   this.arena = arena;
   this.x = x;
   this.y = y;
-  this.occupants = [];
+  this.occupant = null;
   this.adjacentTiles = new AdjacentTiles(this);
 };
 
 Tile.prototype.field = function() {
   return document.getElementById("x_"+this.x+"_y_"+this.y+"");
+}
+
+Tile.prototype.surroundings = function() {
+  return {"up": this.u(), "down": this.d(), "left": this.l(), "right": this.r()};
 }
 
 Tile.prototype.u = function() {
@@ -27,27 +31,26 @@ Tile.prototype.r = function() {
 }
 
 Tile.prototype.addBot = function(bot) {
-  this.occupants.push(bot);
+  this.occupant = bot;
   var field = this.field();
   field.outerHTML = this.toHtml();
 }
 
 Tile.prototype.removeBot = function(bot) {
-  var index = this.occupants.indexOf(bot);
-  this.occupants.splice(index, 1);
+  this.occupant = null;
   var field = this.field();
   field.innerHTML = "";
 }
 
 Tile.prototype.isOccupied = function() {
-  return !(this.occupants.length == 0)
+  return !!(this.occupant);
 }
 
 Tile.prototype.toHtml = function() {
   var string = "<div id='x_"+this.x+"_y_"+this.y+"' class='tile'>";
-  this.occupants.forEach(function(occupant) {
-    string += occupant.toHtml();
-  });
+  if (this.isOccupied()) {
+    string += this.occupant.toHtml();
+  }
   string += "</div>";
   return string;
 }

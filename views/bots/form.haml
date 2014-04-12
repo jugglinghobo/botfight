@@ -18,5 +18,5 @@
     %li
       .pull-right
         %input.btn.btn-success{:type => "submit", :value => "save"}
-        %a.btn.btn-danger{:href => "#", :onclick => "javascript:if(confirm('input will not be saved. proceed?')) {window.history.back(-1);return false;}", :title => "cancel"} cancel
+        %a.btn.btn-danger{:href => "/bots/#{@bot.id}", :onclick => "javascript:if(confirm('input will not be saved. proceed?')) {window.history.back(-1);return false;}", :title => "cancel"} cancel
 

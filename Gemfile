@@ -12,6 +12,7 @@ gem 'rake', '~> 10.2.2'
 
 gem 'haml', '~> 4.0.5'
 gem 'sass', '~> 3.3.4'
+gem 'glorify', '~> 0.5.0'
 
 group :development do
   gem 'rerun', '~> 0.9.0'
