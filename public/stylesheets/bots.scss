@@ -5,8 +5,23 @@
     }
   }
 
+  .table {
+    margin-bottom: 0;
+    .cell {
+      vertical-align: middle;
+    }
+  }
+
   .bot_author, .bot_name {
     width: 200px;
+  }
+
+  .color {
+    width: 200px;
+  }
+
+  .bot_color {
+    width: 165px;
   }
 
   .bot_code {

@@ -17,8 +17,21 @@ Arena.prototype.initListeners = function() {
   $("#add_bot").on("change", function() {
     var bot_id = $(this).val();
     if (bot_id != "") {
-      arena.loadBot(bot_id);
+      var bot = arena.loadBot(bot_id);
+      $.get("/bots/"+bot.id+".html", function(data) {
+        $("#bot_list").append(data);
+        var bot_div = document.getElementById("bot_"+bot.id);
+        var editor = CodeEditor.initCodeEditor(bot_div)[0];
+        editor.setSize("550px", null);
+      });
     };
+  });
+
+  $("#bot_list").on("click", ".toggle_code", function(e) {
+    e.preventDefault();
+    var bot_node = $(this).parents(".bot");
+    console.log(bot_node);
+    bot_node.find(".toggle").toggle();
   });
 
   $("#start_game").on("click", function(e) {

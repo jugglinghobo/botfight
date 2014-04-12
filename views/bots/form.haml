@@ -7,12 +7,23 @@
 %h1= title
 %form#bot_form{:action => action, :method => "post"}
   %ul
-    %li
-      %label.inline{:for => "bot_name"} name:
-      %input.bot_name.inline.form-control{:type => "text", :name => "bot[name]", :value => @bot.name}
-    %li
-      %label.inline{:for => "bot_author"} author:
-      %input.bot_author.inline.form-control{:type => "text", :name => "bot[author]", :value => @bot.author}
+    %li.table
+      .row
+        %label.cell{:for => "bot_name"} name:
+        %input.bot_name.cell.form-control{:type => "text", :name => "bot[name]", :value => @bot.name}
+    %li.table
+      .row
+        %label.cell{:for => "bot_author"} author:
+        %input.bot_author.cell.form-control{:type => "text", :name => "bot[author]", :value => @bot.author}
+    %li.table
+      .row
+        %label.cell{:for => "bot_color"} color:
+        .cell
+          .input-group.color.table{:data => {"color-format" => "hex"}}
+            .row
+              %span.input-group-addon.cell{:style => "background-color: #{@bot.color}"}
+                %span.caret
+              %input.bot_color.inline.form-control.cell{:type => "text", :name => "bot[color]", :value => @bot.color}
     %li
       %textarea.bot_code.inline.form-control{:name => "bot[code]"}= @bot.code
     %li

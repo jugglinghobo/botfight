@@ -41,26 +41,26 @@ post "/bots/create" do
 end
 
 get "/bots/:id.json" do
-  get_post
+  get_bot
   @bot.to_json
 end
 
 get "/bots/:id/edit" do
-  get_post
+  get_bot
   haml :"bots/form"
 end
 
 post "/bots/:id/update" do
-  get_post
+  get_bot
   if @bot.update_attributes params[:bot]
-    redirect to "/bots/#{@bot.id}"
+    redirect to "/bots/#{@bot.id}/edit"
   else
     haml :"bots/form"
   end
 end
 
 post "/bots/:id/delete" do
-  get_post
+  get_bot
   if @bot.destroy
     redirect to "/bots"
   else
@@ -68,7 +68,12 @@ post "/bots/:id/delete" do
   end
 end
 
-def get_post
+get "/bots/:id" do
+  get_bot
+  haml :"bots/bot", :layout => false
+end
+
+def get_bot
   @bot = Bot.find params[:id]
 end
 

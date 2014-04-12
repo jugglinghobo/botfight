@@ -7,16 +7,16 @@
 %script{:src => "/javascript/bot_brain.js"}
 %h1 arena
 
-%select#add_bot.form-control.inline
-  %option{:value => ""}= "add bot"
-  - @bots.each do |bot|
-    %option{:value => bot.id}= bot
-%a#start_game.btn.btn-success{:href => "#", :title => "start game"} start game
-%a#stop_game.btn.btn-danger{:href => "#", :title => "stop game"} stop game
+#arena_controls
+  %select#add_bot.form-control.inline
+    %option{:value => ""}= "add bot"
+    - @bots.each do |bot|
+      %option{:value => bot.id}= bot
+  %a#start_game.btn.btn-success{:href => "#", :title => "start game"} start game
+  %a#stop_game.btn.btn-danger{:href => "#", :title => "stop game"} stop game
 
-.table
-  .row
-    .cell
+#arena_content
+  .table
+    .cell#arena_cell
       %canvas#arena
-    .cell
-      #bot_list
+    .cell#bot_list
