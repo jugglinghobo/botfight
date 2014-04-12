@@ -49,7 +49,4 @@ Tile.prototype.isOccupied = function() {
 
 Tile.prototype.render = function(context) {
   context.strokeRect(this.positionX, this.positionY, this.width, this.height);
-  if (this.isOccupied()) {
-    this.occupant.render(context);
-  }
 }

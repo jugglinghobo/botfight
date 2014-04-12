@@ -4,10 +4,9 @@
       .row
         .cell
           .color_label{:style => "background-color: #{@bot.color}"}
-        %h4.cell.header
-          = "#{@bot.name}"
-          %small
-            = "author: #{@bot.author}"
+        %h4.header.cell
+          .name= "#{@bot.name}"
+          %small= "by #{@bot.author}"
         .bot_actions.cell
           %a.toggle_code.btn.btn-sm.btn-default{:href => "#", :title => "toggle code"} toggle code
           %a.btn.btn-sm.btn-default{:href => "/bots/#{@bot.id}/edit", :title => "edit bot"} edit

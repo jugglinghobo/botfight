@@ -22,6 +22,7 @@ Arena.prototype.initListeners = function() {
         $("#bot_list").append(data);
         var editor_parent = document.getElementById("bot_"+bot.id);
         var editor = CodeEditor.initialize({"container": editor_parent});
+        $("#add_bot option[value="+bot.id+"]").remove();
       });
     };
   });
@@ -31,6 +32,18 @@ Arena.prototype.initListeners = function() {
     var bot_node = $(this).parents(".bot");
     bot_node.find(".toggle").toggle();
     bot_node.find(".detoggle").toggle();
+  });
+
+  $("#bot_list").on("click", ".remove_bot", function(e) {
+    e.preventDefault();
+    var bot_node = $(this).parents(".bot");
+    var bot_id = bot_node.attr("id").match(/\d+/g)[0];
+    var bot_name = bot_node.find(".name").text();
+    var bot = arena.removeBot(bot_id);
+    if (bot) {
+      $("#add_bot").append("<option value='"+bot_id+"'>"+bot_name+"</option>");
+      bot_node.remove();
+    };
   });
 
   $("#start_game").on("click", function(e) {
@@ -54,7 +67,7 @@ Arena.prototype.startGame = function() {
   arena.roundCounter = 0;
   arena.maxRounds = 100;
   this.lastTime = 0;
-  this.activeBot = this.bots.shift();
+  this.activeBot = this.updateActiveBot();
   this.run();
 };
 
@@ -78,8 +91,7 @@ Arena.prototype.run = function() {
 Arena.prototype.update = function() {
   if (this.activeBot.hasFinishedAction) {
     this.activeBot.hasFinishedAction = false;
-    this.addToBots(this.activeBot);
-    this.activeBot = this.bots.shift();
+    this.activeBot = this.updateActiveBot();
   };
   this.activeBot.action();
 };
@@ -96,6 +108,7 @@ Arena.prototype.render = function() {
   arena.context.clearRect(0,0,arena.canvas.width,arena.canvas.height);
   arena.renderGrid();
   arena.bots.forEach(function(bot) {
+    console.log(bot);
     bot.render(arena.context);
   });
 };
@@ -109,9 +122,41 @@ Arena.prototype.loadBot = function(bot_id) {
   return bot;
 };
 
+Arena.prototype.removeBot = function(bot_id) {
+  debugger;
+  var bot = $.grep(this.bots, function(b){ return b.id == bot_id; })[0];
+  if (bot) {
+    bot.currentTile.removeBot(bot);
+    this.removeFromBots(bot);
+    if (this.activeBot == bot) {
+      this.updateActiveBot();
+    }
+    delete bot;
+  }
+  this.render();
+  return bot;
+}
+
 Arena.prototype.addToBots = function(bot) {
   this.bots.push(bot);
 };
+
+Arena.prototype.removeFromBots = function(bot) {
+  var index = this.bots.indexOf(bot);
+  if (index >= 0) {
+    this.bots.splice(index, 1);
+  };
+  return bot;
+}
+
+Arena.prototype.updateActiveBot = function() {
+  this.activeBot = this.bots.shift();
+  this.bots.push(this.activeBot);
+  if (!this.activeBot) {
+    this.stopGame();
+  }
+  return this.activeBot;
+}
 
 Arena.prototype.getRandomFreeTile = function() {
   var tile = this.getRandomTile();
