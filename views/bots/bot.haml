@@ -9,6 +9,6 @@
         %a.toggle_code.btn.btn-sm.btn-default{:href => "#", :title => "toggle code"} toggle code
         %a.btn.btn-sm.btn-default{:href => "/bots/#{@bot.id}/edit", :title => "edit bot"} edit
         %a.remove_bot.btn.btn-sm.btn-danger{:href => "#", :title => "remove bot"} remove bot
-    %li.toggle
+    %li.detoggle
       %textarea.bot_code{"data-readonly" => "nocursor"}= @bot.code
-
+  %hr.toggle

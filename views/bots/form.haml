@@ -1,11 +1,13 @@
 - if @bot.persisted?
   - action = "/bots/#{@bot.id}/update"
   - title = "edit #{@bot}"
+  - id = @bot.id
 - else
   - action = "/bots/create"
   - title = "create a bot"
+  - id = 0
 %h1= title
-%form#bot_form{:action => action, :method => "post"}
+%form.bot.bot_form{:id => "bot_#{id}", :action => action, :method => "post"}
   %ul
     %li.table
       .row

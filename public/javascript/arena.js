@@ -20,9 +20,8 @@ Arena.prototype.initListeners = function() {
       var bot = arena.loadBot(bot_id);
       $.get("/bots/"+bot.id+".html", function(data) {
         $("#bot_list").append(data);
-        var bot_div = document.getElementById("bot_"+bot.id);
-        var editor = CodeEditor.initCodeEditor(bot_div)[0];
-        editor.setSize("550px", null);
+        var editor_parent = document.getElementById("bot_"+bot.id);
+        var editor = CodeEditor.initialize({"container": editor_parent});
       });
     };
   });
@@ -30,8 +29,8 @@ Arena.prototype.initListeners = function() {
   $("#bot_list").on("click", ".toggle_code", function(e) {
     e.preventDefault();
     var bot_node = $(this).parents(".bot");
-    console.log(bot_node);
     bot_node.find(".toggle").toggle();
+    bot_node.find(".detoggle").toggle();
   });
 
   $("#start_game").on("click", function(e) {
