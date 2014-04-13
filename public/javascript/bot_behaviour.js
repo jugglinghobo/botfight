@@ -6,14 +6,18 @@ function BotBehaviour(bot) {
   this.weaponSystem = new BotWeaponSystem(this.bot);
 };
 
-BotBehaviour.prototype.execute = function(action, direction) {
-  this.currentAction = action;
-  this.currentDirection = direction;
-  this[action](direction);
+BotBehaviour.prototype.updateAction = function(action_hash) {
+  this.currentAction = action_hash["action"];
+  this.currentDirection = action_hash["direction"];
+}
+
+BotBehaviour.prototype.executeAction = function(rate) {
+  console.log("executing action: "+this.currentAction);
+  this[this.currentAction](rate, this.currentDirection);
 };
 
-BotBehaviour.prototype.move = function(direction) {
-  this.movement.move(direction);
+BotBehaviour.prototype.move = function(rate, direction) {
+  this.movement.move(rate, direction);
 };
 
 BotBehaviour.prototype.attack = function(direction) {

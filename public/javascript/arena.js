@@ -71,18 +71,10 @@ Arena.prototype.startGame = function() {
   this.run();
 };
 
-function draw() {
-    setTimeout(function() {
-        requestAnimationFrame(draw);
-        // Drawing code goes here
-    }, 1000 / fps);
-}
-
 Arena.prototype.run = function() {
   var arena = this;
   setTimeout(function() {
     arena.requestId = requestAnimationFrame(arena.run.bind(arena));
-
     arena.update();
     arena.render();
   }, 1000/arena.fps);
@@ -90,7 +82,7 @@ Arena.prototype.run = function() {
 
 Arena.prototype.update = function() {
   if (this.activeBot.hasFinishedAction) {
-    this.activeBot.hasFinishedAction = false;
+    this.activeBot.updateAction();
     this.updateActiveBot();
   };
   this.activeBot.action();
@@ -113,6 +105,7 @@ Arena.prototype.render = function() {
 Arena.prototype.loadBot = function(bot_id) {
   var load_path = "/bots/"+bot_id+".json";
   var bot = new Bot(this, load_path);
+  console.log("botx:"+bot.currentTile.x+", boty: "+bot.currentTile.y);
   this.addToBots(bot);
   this.render();
   return bot;
@@ -163,8 +156,8 @@ Arena.prototype.getRandomFreeTile = function() {
 };
 
 Arena.prototype.getRandomTile = function() {
-  var x = getRandomInt(0, this.width);
-  var y = getRandomInt(0, this.width);
+  var x = getRandomInt(0, this.width-1);
+  var y = getRandomInt(0, this.height-1);
   return this.grid[x][y];
 }
 
@@ -212,5 +205,5 @@ Arena.prototype.getCanvas = function() {
  * Using Math.round() will give you a non-uniform distribution!
  */
 function getRandomInt (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };

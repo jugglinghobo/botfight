@@ -1,5 +1,6 @@
 function Bot(arena, load_path) {
   this.arena = arena;
+  this.animationTime = 5;
 
   var data = this.load(load_path);
   this.id = data.id;
@@ -19,15 +20,23 @@ function Bot(arena, load_path) {
   this.offset = 2;
   this.width = this.currentTile.width - this.offset;
   this.height = this.currentTile.height - this.offset;
-  this.action();
+  this.hasFinishedAction = true;
+  this.updateAction();
 }
 
-Bot.prototype.action = function() {
+Bot.prototype.updateAction = function() {
   var surroundings = this.currentTile.surroundings();
   var chosenAction = this.brain.action(surroundings);
-  var action = chosenAction["action"];
-  var direction = chosenAction["direction"];
-  this.behaviour.execute(action, direction);
+  this.behaviour.updateAction(chosenAction);
+  console.log("updated action:");
+  console.log(chosenAction);
+}
+
+Bot.prototype.action = function(rate) {
+  if (this.rate == 1) {
+    this.updateAction();
+  }
+  this.behaviour.executeAction(rate);
 }
 
 Bot.prototype.takeDamage = function(damage) {

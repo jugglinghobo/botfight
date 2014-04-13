@@ -6,7 +6,12 @@
   - action = "/bots/create"
   - title = "create a bot"
   - id = 0
-%h1= title
+
+%h1
+  = title
+  .pull-right
+    %form.inline{:action => "/bots/#{@bot.id}/delete", :method => "post"}
+      %input.btn.btn-danger{:type => "submit", :value => "delete", :onclick => "return confirm('Bot will be deleted. This can not be undone.')"}
 %form.bot.bot_form{:id => "bot_#{id}", :action => action, :method => "post"}
   %ul
     %li.table
@@ -31,5 +36,4 @@
     %li
       .pull-right
         %input.btn.btn-success{:type => "submit", :value => "save"}
-        %a.btn.btn-danger{:href => "/arena", :onclick => "javascript:if(confirm('input will not be saved. proceed?')) {window.history.back(-1);return false;}", :title => "cancel"} cancel
 

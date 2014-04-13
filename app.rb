@@ -20,12 +20,6 @@ get "/arena" do
   haml :arena
 end
 
-get "/bots" do
-  @bots = Bot.all
-  @content = File.open("#{File.dirname(__FILE__)}/views/index.md", "rb").read
-  haml :index
-end
-
 get "/bots/form" do
   @bot = Bot.new
   haml :"bots/form"
@@ -62,9 +56,9 @@ end
 post "/bots/:id/delete" do
   get_bot
   if @bot.destroy
-    redirect to "/bots"
+    redirect to "/arena"
   else
-    redirect to "/show"
+    redirect to "/arena"
   end
 end
 
