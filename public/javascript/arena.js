@@ -23,9 +23,11 @@ Arena.prototype.initListeners = function() {
       var bot = arena.loadBot(bot_id);
       $.get("/bots/"+bot.id+".html", function(data) {
         $("#bot_list").prepend(data);
-        var editor_parent = document.getElementById("bot_"+bot.id);
-        var editor = CodeEditor.initialize({"container": editor_parent});
+        var bot_node = document.getElementById("bot_"+bot.id);
+        var editor = CodeEditor.initialize({"container": bot_node});
         $("#add_bot option[value="+bot.id+"]").remove();
+        $(bot_node).find(".toggle").toggle();
+        $(bot_node).find(".detoggle").toggle();
       });
     };
   });
@@ -178,7 +180,7 @@ Arena.prototype.getRandomTile = function() {
 
 Arena.prototype.inBounds = function(orientation, position) {
   var maxBounds = this[orientation];
-  var pos
+  var pos;
   if (position < 0) {
     pos = position + maxBounds;
   } else if (position > maxBounds-1) {

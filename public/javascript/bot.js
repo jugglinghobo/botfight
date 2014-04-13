@@ -11,10 +11,10 @@ function Bot(arena, load_path) {
   this.icon.src = "images/arrow.jpeg";
 
   this.tile = this.arena.getRandomFreeTile();
-  this.x = this.tile.x;
-  this.y = this.tile.y;
-
   this.offset = 2;
+  this.x = this.tile.x + this.offset;
+  this.y = this.tile.y + this.offset;
+
   this.width = this.tile.width - this.offset;
   this.height = this.tile.height - this.offset;
 
@@ -24,11 +24,14 @@ function Bot(arena, load_path) {
 }
 
 Bot.prototype.finishTurn = function() {
-    this.behaviour.finishTurn();
+  this.updateAction();
+  this.behaviour.finishTurn();
 }
 
 Bot.prototype.updateAction = function() {
+  console.log("UPDATE ACTION");
   var surroundings = this.tile.surroundings();
+  var roundCounter = this.arena.roundCounter;
   var chosenAction = this.brain.action(surroundings);
   this.behaviour.updateAction(chosenAction);
 }

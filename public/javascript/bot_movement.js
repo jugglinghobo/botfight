@@ -62,7 +62,7 @@ BotMovement.prototype.render = function(context) {
   context.save();
   context.translate(this.bot.x, this.bot.y);
   context.rotate(rad);
-  context.drawImage(this.bot.icon, 0+this.bot.offset, 0+this.bot.offset);
+  context.drawImage(this.bot.icon, 0, 0);
   context.restore();
 }
 
