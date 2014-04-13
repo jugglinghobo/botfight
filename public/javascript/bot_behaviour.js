@@ -1,31 +1,38 @@
 function BotBehaviour(bot) {
   this.bot = bot;
-  this.currentAction;
-  this.currentDirection;
+  this.action;
+  this.direction;
   this.movement = new BotMovement(this.bot);
   this.weaponSystem = new BotWeaponSystem(this.bot);
 };
 
-BotBehaviour.prototype.updateAction = function(action_hash) {
-  this.currentAction = action_hash["action"];
-  this.currentDirection = action_hash["direction"];
+BotBehaviour.prototype.finishTurn = function() {
+  this.movement.finishTurn();
+  this.weaponSystem.finishTurn();
 }
 
-BotBehaviour.prototype.executeAction = function(rate) {
-  console.log("executing action: "+this.currentAction);
-  this[this.currentAction](rate, this.currentDirection);
+BotBehaviour.prototype.updateAction = function(action_hash) {
+  this.action = action_hash["action"];
+  this.direction = action_hash["direction"];
+  this.movement.updateAction(action_hash);
+  this.weaponSystem.updateAction(action_hash);
+}
+
+BotBehaviour.prototype.executeAction = function(progress) {
+  this[this.action](progress);
 };
 
-BotBehaviour.prototype.move = function(rate, direction) {
-  this.movement.move(rate, direction);
+BotBehaviour.prototype.move = function(progress) {
+  this.movement.move(progress);
 };
 
-BotBehaviour.prototype.attack = function(direction) {
-  this.weaponSystem.attack(direction);
+BotBehaviour.prototype.attack = function(progress) {
+  this.weaponSystem.attack(progress);
 };
+
 
 BotBehaviour.prototype.render = function(context) {
-  switch(this.currentAction) {
+  switch(this.action) {
     case "move":
       this.movement.render(context);
       break;

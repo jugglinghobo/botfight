@@ -1,9 +1,9 @@
-function Tile(arena, x, y, tileSize) {
+function Tile(arena, gridX, gridY, tileSize) {
   this.arena = arena;
-  this.x = x;
-  this.y = y;
-  this.positionX = x*tileSize;
-  this.positionY = y*tileSize;
+  this.gridX = gridX;
+  this.gridY = gridY;
+  this.x = this.gridX * tileSize;
+  this.y = this.gridY * tileSize;
   this.width = tileSize;
   this.height = tileSize;
   this.occupant = null;
@@ -47,5 +47,5 @@ Tile.prototype.isOccupied = function() {
 }
 
 Tile.prototype.render = function(context) {
-  context.strokeRect(this.positionX, this.positionY, this.width, this.height);
+  context.strokeRect(this.x, this.y, this.width, this.height);
 }

@@ -2,14 +2,17 @@ $(document).ready(function() {
   var arena = new Arena();
 });
 
-function Arena(width, height, tileSize) {
-  this.width = width || 10;
-  this.height = height || 10;
+function Arena(gridWidth, gridHeight, tileSize) {
+  this.gridWidth = gridWidth || 10;
+  this.gridHeight = gridHeight || 10;
   this.tileSize = tileSize || 20;
+  this.width = this.gridWidth * this.tileSize;
+  this.height = this.gridHeight * this.tileSize;
   this.bots = [];
   this.grid = [];
   this.initGrid();
   this.initListeners();
+  window.arena = this;
 };
 
 Arena.prototype.initListeners = function() {
@@ -19,7 +22,7 @@ Arena.prototype.initListeners = function() {
     if (bot_id != "") {
       var bot = arena.loadBot(bot_id);
       $.get("/bots/"+bot.id+".html", function(data) {
-        $("#bot_list").append(data);
+        $("#bot_list").prepend(data);
         var editor_parent = document.getElementById("bot_"+bot.id);
         var editor = CodeEditor.initialize({"container": editor_parent});
         $("#add_bot option[value="+bot.id+"]").remove();
@@ -62,11 +65,10 @@ Arena.prototype.initListeners = function() {
 };
 
 Arena.prototype.startGame = function() {
-  var fps = 4;
-  var arena = this;
-  arena.roundCounter = 0;
-  arena.maxRounds = 100;
-  this.lastTime = 0;
+  this.fps = 20;
+  this.roundCounter = 0;
+  this.maxRounds = 100;
+  this.progress = 0;
   this.updateActiveBot();
   this.run();
 };
@@ -75,18 +77,27 @@ Arena.prototype.run = function() {
   var arena = this;
   setTimeout(function() {
     arena.requestId = requestAnimationFrame(arena.run.bind(arena));
+
+    arena.progress+=0.1;
     arena.update();
     arena.render();
+
   }, 1000/arena.fps);
 }
 
 Arena.prototype.update = function() {
-  if (this.activeBot.hasFinishedAction) {
-    this.activeBot.updateAction();
-    this.updateActiveBot();
+  this.activeBot.action(arena.progress);
+
+  if (this.progress >= 1) {
+    this.finishTurn();
   };
-  this.activeBot.action();
 };
+
+Arena.prototype.finishTurn = function() {
+  this.activeBot.finishTurn();
+  this.updateActiveBot();
+  this.progress = 0;
+}
 
 Arena.prototype.stopGame = function() {
   cancelAnimationFrame(this.requestId);
@@ -105,7 +116,7 @@ Arena.prototype.render = function() {
 Arena.prototype.loadBot = function(bot_id) {
   var load_path = "/bots/"+bot_id+".json";
   var bot = new Bot(this, load_path);
-  console.log("botx:"+bot.currentTile.x+", boty: "+bot.currentTile.y);
+  console.log("botx:"+bot.tile.gridX+", boty: "+bot.tile.gridY);
   this.addToBots(bot);
   this.render();
   return bot;
@@ -114,7 +125,7 @@ Arena.prototype.loadBot = function(bot_id) {
 Arena.prototype.removeBot = function(bot_id) {
   var bot = $.grep(this.bots, function(b){ return b.id == bot_id; })[0];
   if (bot) {
-    bot.currentTile.removeBot(bot);
+    bot.tile.removeBot(bot);
     this.removeFromBots(bot);
     if (this.activeBot == bot) {
       this.updateActiveBot();
@@ -156,34 +167,37 @@ Arena.prototype.getRandomFreeTile = function() {
 };
 
 Arena.prototype.getRandomTile = function() {
-  var x = getRandomInt(0, this.width-1);
-  var y = getRandomInt(0, this.height-1);
+  var x = getRandomInt(0, this.gridWidth-1);
+  var y = getRandomInt(0, this.gridHeight-1);
   return this.grid[x][y];
 }
 
-Arena.prototype.inBounds = function(bounds, position) {
-  var maxBounds = this[bounds];
+Arena.prototype.inBounds = function(orientation, position) {
+  var maxBounds = this[orientation];
+  console.log(maxBounds);
+  var pos
   if (position < 0) {
-    return position + maxBounds;
+    pos = position + maxBounds;
   } else if (position > maxBounds-1) {
-    return position - maxBounds;
+    pos = position - maxBounds;
   } else {
-    return position;
+    pos = position;
   };
+  return pos;
 };
 
 Arena.prototype.initGrid = function() {
-  for(var x = 0; x < this.width; x++) {
+  for(var x = 0; x < this.gridWidth; x++) {
     this.grid[x] = [];
-    for (var y = 0; y < this.height; y++) {
+    for (var y = 0; y < this.gridHeight; y++) {
       var tile = new Tile(this, x, y, this.tileSize);
       this.grid[x][y] = tile;
     };
   };
   this.canvas = this.getCanvas();
   this.context = this.canvas.getContext("2d");
-  this.canvas.width = this.grid.length*this.tileSize;
-  this.canvas.height = this.grid.length*this.tileSize;
+  this.canvas.width = this.width;
+  this.canvas.height = this.width;
   this.renderGrid();
 };
 

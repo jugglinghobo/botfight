@@ -5,8 +5,8 @@ function BotWeaponSystem(bot) {
 }
 
 BotWeaponSystem.prototype.attack = function() {
-  var currentTile = this.bot.currentTile;
-  var nextTile = currentTile[direction]();
+  var tile = this.bot.tile;
+  var nextTile = tile[direction]();
   if (nextTile.isOccupied()) {
     nextTile.dealDamage()
   };
@@ -14,10 +14,19 @@ BotWeaponSystem.prototype.attack = function() {
   this[direction](nextTile);
 
   if (this.bot.hasFinishedAction) {
-    this.bot.currentTile = nextTile;
-    this.bot.positionX = this.bot.currentTile.positionX;
-    this.bot.positionY = this.bot.currentTile.positionY;
-    currentTile.removeBot(this.bot);
+    this.bot.tile = nextTile;
+    this.bot.x = this.bot.tile.x;
+    this.bot.y = this.bot.tile.y;
+    tile.removeBot(this.bot);
     nextTile.addBot(this.bot);
   };
+}
+
+BotWeaponSystem.prototype.updateAction = function(action_hash) {
+  this.action = action_hash["action"];
+  this.direction = action_hash["direction"];
+}
+
+BotWeaponSystem.prototype.finishTurn = function() {
+  this.tile = this.bot.tile;
 }
