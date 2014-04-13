@@ -16,8 +16,7 @@ BotMovement.prototype.move = function(progress) {
 };
 
 BotMovement.prototype.up = function(progress) {
-  var stepSize = progress*this.tile.height;
-  this.bot.y = this.tile.y - stepSize;
+  this.bot.y = this.tile.y - this.stepSize(progress);
 
   // overflow handling
   if (this.bot.y < 0) {
@@ -25,43 +24,35 @@ BotMovement.prototype.up = function(progress) {
   };
 };
 
-BotMovement.prototype.down = function() {
-  this.bot.y += this.stepSize;
-  if (this.botReachedTile()) {
-    this.bot.hasFinishedAction = true;
-  };
+BotMovement.prototype.down = function(progress) {
+  this.bot.y = this.tile.y + this.stepSize(progress);
+
+  // overflow handling
   if (this.bot.y > this.maxHeight) {
     this.bot.y -= this.maxHeight;
   };
 };
 
-BotMovement.prototype.left = function() {
-  this.bot.x -= this.stepSize;
-  if (this.botReachedTile()) {
-    this.bot.hasFinishedAction = true;
-  };
+BotMovement.prototype.left = function(progress) {
+  this.bot.x = this.tile.x - this.stepSize(progress);
+
+  // overflow handling
   if (this.bot.x < 0) {
     this.bot.x += this.maxWidth;
   };
 };
 
-BotMovement.prototype.right = function() {
-  this.bot.x += this.stepSize;
-  if (this.botReachedTile()) {
-    this.bot.hasFinishedAction = true;
-  };
+BotMovement.prototype.right = function(progress) {
+  this.bot.x = this.tile.x + this.stepSize(progress);
+
+  //overflow handling
   if (this.bot.x > this.maxWidth) {
     this.bot.x -= this.maxWidth;
   };
 };
 
-BotMovement.prototype.stepSize = function() {
-
-}
-
-BotMovement.prototype.botReachedTile = function() {
-  return ((this.nextTile.x-2 <= this.bot.x && this.nextTile.x+2 >= this.bot.x)
-      && (this.nextTile.y-2 <= this.bot.y && this.nextTile.y+2 >= this.bot.y))
+BotMovement.prototype.stepSize = function(progress) {
+  return progress * this.tile.height;
 }
 
 // turn face direction
@@ -77,7 +68,7 @@ BotMovement.prototype.render = function(context) {
 
 BotMovement.prototype.degreesForDirection = function() {
   var degrees = {"up": 270, "down": 90, "left": 180, "right": 0};
-  return degrees[this.currentDirection];
+  return degrees[this.direction];
 }
 
 BotMovement.prototype.updateAction = function(action_hash) {

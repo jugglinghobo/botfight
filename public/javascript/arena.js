@@ -69,20 +69,23 @@ Arena.prototype.startGame = function() {
   this.roundCounter = 0;
   this.maxRounds = 100;
   this.progress = 0;
+  this.running = true;
   this.updateActiveBot();
   this.run();
 };
 
 Arena.prototype.run = function() {
-  var arena = this;
-  setTimeout(function() {
-    arena.requestId = requestAnimationFrame(arena.run.bind(arena));
+  if (this.running) {
+    var arena = this;
+    setTimeout(function() {
+      arena.requestId = requestAnimationFrame(arena.run.bind(arena));
 
-    arena.progress+=0.1;
-    arena.update();
-    arena.render();
+      arena.progress+=0.1;
+      arena.update();
+      arena.render();
 
-  }, 1000/arena.fps);
+    }, 1000/arena.fps);
+  }
 }
 
 Arena.prototype.update = function() {
@@ -100,6 +103,7 @@ Arena.prototype.finishTurn = function() {
 }
 
 Arena.prototype.stopGame = function() {
+  this.running = false;
   cancelAnimationFrame(this.requestId);
 }
 
@@ -174,7 +178,6 @@ Arena.prototype.getRandomTile = function() {
 
 Arena.prototype.inBounds = function(orientation, position) {
   var maxBounds = this[orientation];
-  console.log(maxBounds);
   var pos
   if (position < 0) {
     pos = position + maxBounds;
