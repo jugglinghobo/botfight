@@ -12,9 +12,9 @@ function Bot(arena, load_path) {
 
   this.tile = this.arena.getRandomFreeTile();
   this.offset = 2;
+
   this.x = this.tile.x + this.offset;
   this.y = this.tile.y + this.offset;
-
   this.width = this.tile.width - this.offset;
   this.height = this.tile.height - this.offset;
 

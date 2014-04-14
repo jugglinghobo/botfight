@@ -12,7 +12,8 @@ get "/" do
 end
 
 get "/about" do
-  render :about
+  @content = File.open("#{File.dirname(__FILE__)}/views/about.md", "rb").read
+  haml :about
 end
 
 get "/arena" do
@@ -82,11 +83,10 @@ end
 class Bot < ActiveRecord::Base
 
   SKELETON_CODE = <<-END
-// Bots have three possible actions. One of those can be executed every turn.
-// move:   [up, down, left, right] return {"move": "u"}; // move up
-// attack: [up, down, left, right] return {"attack": "l"}; // attack to left
-// clone:  [up, down, left, right] return {"clone": "d"}; // insert clone below
-//
+// move example:
+// var action = function(surroundings) {
+//   return {"action": "move": "direction": "u"}; // move up
+// }
 // you can inspect your surroundings, which is a 3x3 array
 
 var action = function(surroundings) {
