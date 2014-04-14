@@ -4,14 +4,13 @@ function Tile(arena, gridX, gridY, tileSize) {
   this.gridY = gridY;
   this.x = this.gridX * tileSize;
   this.y = this.gridY * tileSize;
-  this.width = tileSize;
-  this.height = tileSize;
+  this.size = tileSize;
   this.occupant = null;
   this.adjacentTiles = new AdjacentTiles(this);
 };
 
 Tile.prototype.surroundings = function() {
-  return {"up": this.up(), "down": this.down(), "left": this.left(), "right": this.right()};
+  return {"up": this.up().isOccupied(), "down": this.down().isOccupied(), "left": this.left().isOccupied(), "right": this.right().isOccupied()};
 }
 
 Tile.prototype.up = function() {
@@ -47,5 +46,10 @@ Tile.prototype.isOccupied = function() {
 }
 
 Tile.prototype.render = function(context) {
-  context.strokeRect(this.x, this.y, this.width, this.height);
+  context.strokeRect(this.x, this.y, this.size, this.size);
+  context.font = "bold 2px";
+  context.textBaseline = "top"
+  context.fillText("x:"+this.x, this.x, this.y);
+  context.textBaseline = "bottom";
+  context.fillText("y:"+this.y, this.x, this.y+this.size);
 }

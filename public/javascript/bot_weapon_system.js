@@ -4,6 +4,14 @@ function BotWeaponSystem(bot) {
   this.attackDuration = 15;
 }
 
+BotWeaponSystem.prototype.startTurn = function() {
+  return true;
+};
+
+BotWeaponSystem.prototype.finishTurn = function() {
+  this.tile = this.bot.tile;
+};
+
 BotWeaponSystem.prototype.attack = function() {
   var tile = this.bot.tile;
   var nextTile = tile[direction]();
@@ -27,6 +35,3 @@ BotWeaponSystem.prototype.updateAction = function(action_hash) {
   this.direction = action_hash["direction"];
 }
 
-BotWeaponSystem.prototype.finishTurn = function() {
-  this.tile = this.bot.tile;
-}

@@ -1,22 +1,23 @@
-function BotMovement(bot) {
+function BotMovement(bot, maxWidth, maxHeight) {
   this.bot = bot;
-  this.direction;
-  this.tile = this.bot.tile;
-  this.nextTile;
-  this.maxHeight = arena.width;
-  this.maxWidth = arena.height;
+  this.maxHeight = maxWidth;
+  this.maxWidth = maxHeight;
+}
+
+BotMovement.prototype.finishTurn = function() {
+  this.bot.tile.removeBot(this.bot);
+  this.bot.tile = this.bot.targetTile;
+  this.bot.tile.addBot(this.bot);
 }
 
 BotMovement.prototype.move = function(progress) {
-  this.nextTile = this.tile[this.direction]();
-
-  if (!this.nextTile.isOccupied()) {
-    this[this.direction](progress);
+  if (!this.bot.targetTile.isOccupied()) {
+    this[this.bot.direction](progress);
   };
 };
 
 BotMovement.prototype.up = function(progress) {
-  this.bot.y = this.tile.y - this.stepSize(progress);
+  this.bot.y = this.bot.tile.y - this.stepSize(progress);
 
   // overflow handling
   if (this.bot.y < 0) {
@@ -25,7 +26,7 @@ BotMovement.prototype.up = function(progress) {
 };
 
 BotMovement.prototype.down = function(progress) {
-  this.bot.y = this.tile.y + this.stepSize(progress);
+  this.bot.y = this.bot.tile.y + this.stepSize(progress);
 
   // overflow handling
   if (this.bot.y > this.maxHeight) {
@@ -34,7 +35,7 @@ BotMovement.prototype.down = function(progress) {
 };
 
 BotMovement.prototype.left = function(progress) {
-  this.bot.x = this.tile.x - this.stepSize(progress);
+  this.bot.x = this.bot.tile.x - this.stepSize(progress);
 
   // overflow handling
   if (this.bot.x < 0) {
@@ -43,7 +44,7 @@ BotMovement.prototype.left = function(progress) {
 };
 
 BotMovement.prototype.right = function(progress) {
-  this.bot.x = this.tile.x + this.stepSize(progress);
+  this.bot.x = this.bot.tile.x + this.stepSize(progress);
 
   //overflow handling
   if (this.bot.x > this.maxWidth) {
@@ -52,32 +53,40 @@ BotMovement.prototype.right = function(progress) {
 };
 
 BotMovement.prototype.stepSize = function(progress) {
-  return progress * this.tile.height;
+  return progress * this.bot.tile.size;
 }
 
 // turn face direction
 BotMovement.prototype.render = function(context) {
   var degrees = this.degreesForDirection();
   var rad = degrees*Math.PI/180;
+  var offsetX = this.bot.width/2;
+  var offsetY = this.bot.height/2;
+  var centerX = this.bot.x+offsetX;
+  var centerY = this.bot.y+offsetY;
   context.save();
-  context.translate(this.bot.x, this.bot.y);
+  context.translate(centerX, centerY);
   context.rotate(rad);
-  context.drawImage(this.bot.icon, 0, 0);
+  context.clearRect(0-offsetX, 0-offsetY, this.bot.width, this.bot.height);
+  context.fillRect(0-offsetX, 0-offsetY, this.bot.width, this.bot.height);
+  context.fillStyle = "white";
+  context.font = "bold 2px";
+  context.textBaseline = "top"
+  context.fillText("x:"+this.bot.x, 0-offsetX, 0-offsetY);
+  context.textBaseline = "bottom";
+  context.fillText("y:"+this.bot.y, 0-offsetX, 0-offsetY+this.bot.width);
+  //context.drawImage(this.bot.icon, 0-(offsetX-this.bot.offset), 0-(offsetY-this.bot.offset));
   context.restore();
+  context.fillStyle = "black";
+
+  var XA = this.bot.targetTile.x+8;
+  var YA = this.bot.targetTile.y+8;
+  var XE = this.bot.targetTile.size-8;
+  var YE = this.bot.targetTile.size-8;
+  context.fillRect(XA, YA, XE, YE);
 }
 
 BotMovement.prototype.degreesForDirection = function() {
   var degrees = {"up": 270, "down": 90, "left": 180, "right": 0};
   return degrees[this.direction];
-}
-
-BotMovement.prototype.updateAction = function(action_hash) {
-  this.action = action_hash["action"];
-  this.direction = action_hash["direction"];
-}
-
-BotMovement.prototype.finishTurn = function() {
-  this.tile.removeBot(this.bot);
-  this.tile = this.nextTile;
-  this.tile.addBot(this.bot);
 }

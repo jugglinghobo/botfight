@@ -85,7 +85,7 @@ class Bot < ActiveRecord::Base
   SKELETON_CODE = <<-END
 // move example:
 // var action = function(surroundings) {
-//   return {"action": "move": "direction": "u"}; // move up
+//   return {"action": "move", "direction": "u"}; // move up
 // }
 // you can inspect your surroundings, which is a 3x3 array
 

@@ -5,7 +5,7 @@ $(document).ready(function() {
 function Arena(gridWidth, gridHeight, tileSize) {
   this.gridWidth = gridWidth || 10;
   this.gridHeight = gridHeight || 10;
-  this.tileSize = tileSize || 20;
+  this.tileSize = tileSize || 25;
   this.width = this.gridWidth * this.tileSize;
   this.height = this.gridHeight * this.tileSize;
   this.bots = [];
@@ -21,7 +21,7 @@ Arena.prototype.initListeners = function() {
     var bot_id = $(this).val();
     if (bot_id != "") {
       var bot = arena.loadBot(bot_id);
-      $.get("/bots/"+bot.id+".html", function(data) {
+      $.get("/bots/"+bot.data.id+".html", function(data) {
         $("#bot_list").prepend(data);
         var bot_node = document.getElementById("bot_"+bot.id);
         var editor = CodeEditor.initialize({"container": bot_node});
@@ -79,10 +79,9 @@ Arena.prototype.startGame = function() {
 Arena.prototype.run = function() {
   if (this.running) {
     var arena = this;
-    setTimeout(function() {
-      arena.requestId = requestAnimationFrame(arena.run.bind(arena));
+    this.intervalId = setInterval(function() {
+      //arena.requestId = requestAnimationFrame(arena.run.bind(arena));
 
-      arena.progress+=0.1;
       arena.update();
       arena.render();
 
@@ -91,12 +90,20 @@ Arena.prototype.run = function() {
 }
 
 Arena.prototype.update = function() {
-  this.activeBot.action(arena.progress);
+  if (this.progress == 0) {
+    this.startTurn();
+  }
+  this.progress+=0.1;
+  this.activeBot.executeAction(this.progress);
 
   if (this.progress >= 1) {
     this.finishTurn();
   };
 };
+
+Arena.prototype.startTurn = function() {
+  this.activeBot.startTurn();
+}
 
 Arena.prototype.finishTurn = function() {
   this.activeBot.finishTurn();
@@ -106,14 +113,15 @@ Arena.prototype.finishTurn = function() {
 
 Arena.prototype.stopGame = function() {
   this.running = false;
+  clearInterval(this.intervalId);
   cancelAnimationFrame(this.requestId);
 }
 
 Arena.prototype.render = function() {
   var arena = this;
-  arena.context.clearRect(0,0,arena.canvas.width,arena.canvas.height);
-  arena.renderGrid();
-  arena.bots.forEach(function(bot) {
+  this.context.clearRect(0,0,arena.canvas.width,arena.canvas.height);
+  this.renderGrid();
+  this.bots.forEach(function(bot) {
     bot.render(arena.context);
   });
 };
@@ -129,7 +137,7 @@ Arena.prototype.loadBot = function(bot_id) {
 };
 
 Arena.prototype.removeBot = function(bot_id) {
-  var bot = $.grep(this.bots, function(b){ return b.id == bot_id; })[0];
+  var bot = $.grep(this.bots, function(b){ return b.data.id == bot_id; })[0];
   if (bot) {
     bot.tile.removeBot(bot);
     this.removeFromBots(bot);
@@ -201,8 +209,8 @@ Arena.prototype.initGrid = function() {
   };
   this.canvas = this.getCanvas();
   this.context = this.canvas.getContext("2d");
-  this.canvas.width = this.width;
-  this.canvas.height = this.width;
+  this.canvas.width = this.width+10;
+  this.canvas.height = this.width+10;
   this.renderGrid();
 };
 

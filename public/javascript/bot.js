@@ -1,57 +1,64 @@
-function Bot(arena, load_path) {
-  this.arena = arena;
-  this.animationTime = 5;
+function Bot(arena, loadPath) {
+  this.tile = arena.getRandomFreeTile();
+  this.x = this.tile.x;
+  this.y = this.tile.y;
+  this.width = arena.tileSize;
+  this.height = arena.tileSize;
 
-  var data = this.load(load_path);
-  this.id = data.id;
-  this.name = data.name;
-  this.author = data.author;
-  this.code = data.code;
-  this.icon = new Image();
-  this.icon.src = "images/arrow.jpeg";
 
-  this.tile = this.arena.getRandomFreeTile();
-  this.offset = 2;
+  var maxWidth = arena.width;
+  var maxHeight = arena.height;
 
-  this.x = this.tile.x + this.offset;
-  this.y = this.tile.y + this.offset;
-  this.width = this.tile.width - this.offset;
-  this.height = this.tile.height - this.offset;
+  this.data = new BotData(loadPath)
+  this.brain = new BotBrain(this.data.code);
 
-  this.brain = new BotBrain(this.code);
-  this.behaviour = new BotBehaviour(this);
+
+  var initialAction = this.brain.action(this.tile.surroundings());
+  this.action = initialAction["action"];
+  this.direction = initialAction["direction"];
+
+  this.targetTile = this.tile[this.direction]();
+
+  this.movement = new BotMovement(this, maxWidth, maxHeight);
+  this.weaponSystem = new BotWeaponSystem(this);
+};
+
+Bot.prototype.startTurn = function() {
   this.updateAction();
+  this.targetTile = this.tile[this.direction]();
 }
 
 Bot.prototype.finishTurn = function() {
-  this.updateAction();
-  this.behaviour.finishTurn();
+  this.movement.finishTurn();
+  this.weaponSystem.finishTurn();
 }
 
 Bot.prototype.updateAction = function() {
-  console.log("UPDATE ACTION");
   var surroundings = this.tile.surroundings();
-  var roundCounter = this.arena.roundCounter;
-  var chosenAction = this.brain.action(surroundings);
-  this.behaviour.updateAction(chosenAction);
+  var actionHash = this.brain.action(surroundings);
+  this.action = actionHash["action"];
+  this.direction = actionHash["direction"];
 }
 
-Bot.prototype.action = function(progress) {
-  this.behaviour.executeAction(progress);
-}
+Bot.prototype.executeAction = function(progress) {
+  this[this.action](progress);
+};
+
+Bot.prototype.move = function(progress) {
+  this.movement.move(progress);
+};
+
+Bot.prototype.attack = function(progress) {
+  this.weaponSystem.attack(progress);
+};
 
 Bot.prototype.render = function(context) {
-  this.behaviour.render(context)
+  switch(this.action) {
+    case "move":
+      this.movement.render(context);
+      break;
+    case "attack":
+      this.weaponSystem.render(context);
+      break;
+  }
 }
-
-Bot.prototype.load = function(load_path) {
-  var data;
-  $.ajax({
-    url: load_path,
-    dataType: 'json',
-    async: false,
-  }).success(function(response) {
-    data = response;
-  });
-  return data;
-};
