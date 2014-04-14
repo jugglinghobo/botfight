@@ -8,6 +8,7 @@ function BotData(load_path) {
   this.code = data.code;
   this.icon = new Image();
   this.icon.src = "images/arrow.jpeg";
+  this.offset = 5;
 }
 
 BotData.prototype.load = function(load_path) {

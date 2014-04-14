@@ -5,7 +5,7 @@ $(document).ready(function() {
 function Arena(gridWidth, gridHeight, tileSize) {
   this.gridWidth = gridWidth || 10;
   this.gridHeight = gridHeight || 10;
-  this.tileSize = tileSize || 25;
+  this.tileSize = tileSize || 30;
   this.width = this.gridWidth * this.tileSize;
   this.height = this.gridHeight * this.tileSize;
   this.bots = [];
@@ -25,7 +25,7 @@ Arena.prototype.initListeners = function() {
         $("#bot_list").prepend(data);
         var bot_node = document.getElementById("bot_"+bot.id);
         var editor = CodeEditor.initialize({"container": bot_node});
-        $("#add_bot option[value="+bot.id+"]").remove();
+        $("#add_bot option[value="+bot.data.id+"]").remove();
         $(bot_node).find(".toggle").toggle();
         $(bot_node).find(".detoggle").toggle();
       });
@@ -93,12 +93,14 @@ Arena.prototype.update = function() {
   if (this.progress == 0) {
     this.startTurn();
   }
-  this.progress+=0.1;
-  this.activeBot.executeAction(this.progress);
 
   if (this.progress >= 1) {
     this.finishTurn();
+  } else {
+    this.activeBot.executeAction(this.progress);
+    this.progress+=0.1;
   };
+
 };
 
 Arena.prototype.startTurn = function() {

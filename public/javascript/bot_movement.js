@@ -67,26 +67,16 @@ BotMovement.prototype.render = function(context) {
   context.save();
   context.translate(centerX, centerY);
   context.rotate(rad);
-  context.clearRect(0-offsetX, 0-offsetY, this.bot.width, this.bot.height);
-  context.fillRect(0-offsetX, 0-offsetY, this.bot.width, this.bot.height);
-  context.fillStyle = "white";
-  context.font = "bold 2px";
-  context.textBaseline = "top"
-  context.fillText("x:"+this.bot.x, 0-offsetX, 0-offsetY);
-  context.textBaseline = "bottom";
-  context.fillText("y:"+this.bot.y, 0-offsetX, 0-offsetY+this.bot.width);
-  //context.drawImage(this.bot.icon, 0-(offsetX-this.bot.offset), 0-(offsetY-this.bot.offset));
+  context.drawImage(this.bot.data.icon, 0-(offsetX-this.bot.data.offset), 0-(offsetY-this.bot.data.offset));
   context.restore();
-  context.fillStyle = "black";
-
-  var XA = this.bot.targetTile.x+8;
-  var YA = this.bot.targetTile.y+8;
-  var XE = this.bot.targetTile.size-8;
-  var YE = this.bot.targetTile.size-8;
-  context.fillRect(XA, YA, XE, YE);
+  //var XA = this.bot.targetTile.x+8;
+  //var YA = this.bot.targetTile.y+8;
+  //var XE = this.bot.targetTile.size-8;
+  //var YE = this.bot.targetTile.size-8;
+  //context.fillRect(XA, YA, XE, YE);
 }
 
 BotMovement.prototype.degreesForDirection = function() {
-  var degrees = {"up": 270, "down": 90, "left": 180, "right": 0};
-  return degrees[this.direction];
+  var degrees = {"up": 0, "down": 180, "left": 270, "right": 90};
+  return degrees[this.bot.direction];
 }
