@@ -7,7 +7,7 @@ function BotData(load_path) {
   this.author = data.author;
   this.code = data.code;
   this.icon = new Image();
-  this.icon.src = "images/arrow.jpeg";
+  this.icon.src = "images/bot.png";
   this.offset = 5;
 }
 

@@ -115,6 +115,10 @@ Arena.prototype.finishTurn = function() {
 
 Arena.prototype.stopGame = function() {
   this.running = false;
+  this.bots.forEach(function(bot) {
+    bot.resetPosition();
+  });
+  this.render();
   clearInterval(this.intervalId);
   cancelAnimationFrame(this.requestId);
 }

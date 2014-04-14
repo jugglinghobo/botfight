@@ -52,6 +52,11 @@ Bot.prototype.attack = function(progress) {
   this.weaponSystem.attack(progress);
 };
 
+Bot.prototype.resetPosition = function() {
+  this.x = this.tile.x;
+  this.y = this.tile.y;
+}
+
 Bot.prototype.render = function(context) {
   switch(this.action) {
     case "move":
