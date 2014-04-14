@@ -12,7 +12,7 @@
 #arena_controls
   %select#add_bot.form-control.inline
     %option{:value => ""}= "add bot"
-    - @bots.each do |bot|
+    - @bots.reverse.each do |bot|
       %option{:value => bot.id}= bot
   %a#start_game.btn.btn-success{:href => "#", :title => "start game"} start game
   %a#stop_game.btn.btn-danger{:href => "#", :title => "stop game"} stop game

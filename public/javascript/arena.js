@@ -20,15 +20,7 @@ Arena.prototype.initListeners = function() {
   $("#add_bot").on("change", function() {
     var bot_id = $(this).val();
     if (bot_id != "") {
-      var bot = arena.loadBot(bot_id);
-      $.get("/bots/"+bot.data.id+".html", function(data) {
-        $("#bot_list").prepend(data);
-        var bot_node = document.getElementById("bot_"+bot.id);
-        var editor = CodeEditor.initialize({"container": bot_node});
-        $("#add_bot option[value="+bot.data.id+"]").remove();
-        $(bot_node).find(".toggle").toggle();
-        $(bot_node).find(".detoggle").toggle();
-      });
+      arena.loadBot(bot_id);
     };
   });
 
@@ -133,11 +125,20 @@ Arena.prototype.render = function() {
 };
 
 
-Arena.prototype.loadBot = function(bot_id) {
+Arena.prototype.loadBot = function(bot_id, tile) {
   var load_path = "/bots/"+bot_id+".json";
-  var bot = new Bot(this, load_path);
+  var bot = new Bot(this, load_path, tile);
   this.addToBots(bot);
   this.render();
+
+  $.get("/bots/"+bot.data.id+".html", function(data) {
+    $("#bot_list").prepend(data);
+    var bot_node = document.getElementById("bot_"+bot.id);
+    var editor = CodeEditor.initialize({"container": bot_node});
+    $("#add_bot option[value="+bot.data.id+"]").remove();
+    $(bot_node).find(".toggle").toggle();
+    $(bot_node).find(".detoggle").toggle();
+  });
   return bot;
 };
 

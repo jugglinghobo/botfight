@@ -1,37 +1,39 @@
 function BotWeaponSystem(bot) {
   this.bot = bot;
   this.damage = 1;
-  this.attackDuration = 15;
+  this.opponent;
 }
 
 BotWeaponSystem.prototype.startTurn = function() {
-  return true;
+  this.opponent = this.bot.targetTile.occupant;
 };
 
 BotWeaponSystem.prototype.finishTurn = function() {
-  this.tile = this.bot.tile;
+  if (this.opponent) {
+    this.opponent.takeDamage(this.damage);
+    this.opponent = undefined;
+  };
 };
 
-BotWeaponSystem.prototype.attack = function() {
-  var tile = this.bot.tile;
-  var nextTile = tile[direction]();
-  if (nextTile.isOccupied()) {
-    nextTile.dealDamage()
-  };
-  // calls direction function
-  this[direction](nextTile);
+BotWeaponSystem.prototype.action = function(progress) {
+  this.damageProgress = progress;
+};
 
-  if (this.bot.hasFinishedAction) {
-    this.bot.tile = nextTile;
-    this.bot.x = this.bot.tile.x;
-    this.bot.y = this.bot.tile.y;
-    tile.removeBot(this.bot);
-    nextTile.addBot(this.bot);
-  };
+BotWeaponSystem.prototype.render = function(context) {
+  if (this.opponent) {
+    var rad = this.radiansForDamageProgress();
+    var offsetX = this.opponent.width/2;
+    var offsetY = this.opponent.height/2;
+    var centerX = this.opponent.x+offsetX;
+    var centerY = this.opponent.y+offsetY;
+    context.save();
+    context.translate(centerX, centerY);
+    context.rotate(rad);
+    context.drawImage(this.opponent.data.icon, 0-(offsetX-this.opponent.data.offset), 0-(offsetY-this.opponent.data.offset));
+    context.restore();
+  }
+};
+
+BotWeaponSystem.prototype.radiansForDamageProgress = function() {
+  return 2*Math.PI*this.damageProgress;
 }
-
-BotWeaponSystem.prototype.updateAction = function(action_hash) {
-  this.action = action_hash["action"];
-  this.direction = action_hash["direction"];
-}
-

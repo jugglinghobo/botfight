@@ -50,9 +50,4 @@ Tile.prototype.render = function(context) {
   context.strokeStyle = "white";
   context.strokeRect(this.x, this.y, this.size, this.size);
   context.strokeStyle = "black";
-  //context.font = "bold 2px";
-  //context.textBaseline = "top"
-  //context.fillText("x:"+this.x, this.x, this.y);
-  //context.textBaseline = "bottom";
-  //context.fillText("y:"+this.y, this.x, this.y+this.size);
 }

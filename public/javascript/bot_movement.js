@@ -1,16 +1,21 @@
-function BotMovement(bot, maxWidth, maxHeight) {
+function BotMovement(bot) {
   this.bot = bot;
-  this.maxHeight = maxWidth;
-  this.maxWidth = maxHeight;
+  this.maxHeight = bot.maxWidth();
+  this.maxWidth = bot.maxHeight();
+}
+
+BotMovement.prototype.startTurn = function() {
 }
 
 BotMovement.prototype.finishTurn = function() {
-  this.bot.tile.removeBot(this.bot);
-  this.bot.tile = this.bot.targetTile;
-  this.bot.tile.addBot(this.bot);
+  if (this.bot.action == "move") {
+    this.bot.tile.removeBot(this.bot);
+    this.bot.tile = this.bot.targetTile;
+    this.bot.tile.addBot(this.bot);
+  }
 }
 
-BotMovement.prototype.move = function(progress) {
+BotMovement.prototype.action = function(progress) {
   if (!this.bot.targetTile.isOccupied()) {
     this[this.bot.direction](progress);
   };
@@ -56,27 +61,6 @@ BotMovement.prototype.stepSize = function(progress) {
   return progress * this.bot.tile.size;
 }
 
-// turn face direction
 BotMovement.prototype.render = function(context) {
-  var degrees = this.degreesForDirection();
-  var rad = degrees*Math.PI/180;
-  var offsetX = this.bot.width/2;
-  var offsetY = this.bot.height/2;
-  var centerX = this.bot.x+offsetX;
-  var centerY = this.bot.y+offsetY;
-  context.save();
-  context.translate(centerX, centerY);
-  context.rotate(rad);
-  context.drawImage(this.bot.data.icon, 0-(offsetX-this.bot.data.offset), 0-(offsetY-this.bot.data.offset));
-  context.restore();
-  //var XA = this.bot.targetTile.x+8;
-  //var YA = this.bot.targetTile.y+8;
-  //var XE = this.bot.targetTile.size-8;
-  //var YE = this.bot.targetTile.size-8;
-  //context.fillRect(XA, YA, XE, YE);
 }
 
-BotMovement.prototype.degreesForDirection = function() {
-  var degrees = {"up": 0, "down": 180, "left": 270, "right": 90};
-  return degrees[this.bot.direction];
-}
