@@ -3,8 +3,8 @@ $(document).ready(function() {
 });
 
 function Arena(gridWidth, gridHeight, tileSize) {
-  this.gridWidth = gridWidth || 10;
-  this.gridHeight = gridHeight || 10;
+  this.gridWidth = gridWidth || 5;
+  this.gridHeight = gridHeight || 5;
   this.tileSize = tileSize || 30;
   this.width = this.gridWidth * this.tileSize;
   this.height = this.gridHeight * this.tileSize;
@@ -96,7 +96,7 @@ Arena.prototype.update = function() {
 };
 
 Arena.prototype.startTurn = function() {
-  this.activeBot.startTurn();
+  this.activeBot.prepareTurn();
 }
 
 Arena.prototype.finishTurn = function() {
@@ -133,7 +133,7 @@ Arena.prototype.loadBot = function(bot_id, tile) {
 
   $.get("/bots/"+bot.data.id+".html", function(data) {
     $("#bot_list").prepend(data);
-    var bot_node = document.getElementById("bot_"+bot.id);
+    var bot_node = document.getElementById("bot_"+bot.data.id);
     var editor = CodeEditor.initialize({"container": bot_node});
     $("#add_bot option[value="+bot.data.id+"]").remove();
     $(bot_node).find(".toggle").toggle();

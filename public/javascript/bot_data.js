@@ -5,6 +5,7 @@ function BotData(load_path) {
   this.id = data.id;
   this.name = data.name;
   this.author = data.author;
+  this.color = data.color;
   this.code = data.code;
   this.icon = new Image();
   this.icon.src = "images/bot.png";

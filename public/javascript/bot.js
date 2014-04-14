@@ -3,6 +3,7 @@ function Bot(arena, loadPath, tile) {
   this.tile = tile || arena.getRandomFreeTile();
   this.tile.addBot(this);
   this.targetTile;
+  this.opponent;
 
   this.x = this.tile.x;
   this.y = this.tile.y;
@@ -11,6 +12,7 @@ function Bot(arena, loadPath, tile) {
 
   this.action;
   this.direction;
+  this.canExecuteAction;
 
   this.lives = 3;
 
@@ -19,27 +21,34 @@ function Bot(arena, loadPath, tile) {
   this.modules = {"move": new BotMovement(this), "attack": new BotWeaponSystem(this)};
 };
 
-Bot.prototype.startTurn = function() {
+Bot.prototype.prepareTurn = function() {
   var surroundings = this.tile.surroundings();
   var actionHash = this.brain.action(surroundings);
   this.action = actionHash["action"];
   this.direction = actionHash["direction"];
-  this.targetTile = this.tile[this.direction]();
-
-  // calls module responsible for action
-  this.modules[this.action].startTurn();
+  this.canExecuteAction = this.modules[this.action].prepareTurn();
 }
 
 Bot.prototype.finishTurn = function() {
   this.modules[this.action].finishTurn();
+  this.canExecuteAction = false;
 }
 
 Bot.prototype.executeAction = function(progress) {
-  this.modules[this.action].action(progress);
+  if (this.canExecuteAction) {
+    this.modules[this.action].action(progress);
+  };
 };
 
 Bot.prototype.takeDamage = function(damage) {
   this.lives -= damage;
+  if (this.lives <= 0) {
+    this.die();
+  }
+}
+
+Bot.prototype.die = function() {
+  arena.removeBot(this.data.id);
 }
 
 Bot.prototype.resetPosition = function() {
@@ -65,6 +74,9 @@ Bot.prototype.render = function(context) {
   var offsetY = this.height/2;
   var centerX = this.x+offsetX;
   var centerY = this.y+offsetY;
+  context.fillStyle = this.data.color;
+  context.fillRect(this.tile.x, this.tile.y, this.tile.size, this.tile.size);
+  context.fillStyle = "black";
   context.save();
   context.translate(centerX, centerY);
   context.rotate(rad);
