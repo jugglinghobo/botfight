@@ -132,7 +132,6 @@ Arena.prototype.render = function() {
 Arena.prototype.loadBot = function(bot_id) {
   var load_path = "/bots/"+bot_id+".json";
   var bot = new Bot(this, load_path);
-  console.log("botx:"+bot.tile.gridX+", boty: "+bot.tile.gridY);
   this.addToBots(bot);
   this.render();
   return bot;
