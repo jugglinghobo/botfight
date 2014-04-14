@@ -7,6 +7,8 @@ require 'glorify'
 require 'haml'
 require 'sass'
 
+require './bot'
+
 get "/" do
   redirect to "/arena"
 end
@@ -80,33 +82,3 @@ get "/stylesheets/:stylesheet.css" do |stylesheet|
   scss template
 end
 
-class Bot < ActiveRecord::Base
-
-  SKELETON_CODE = <<-END
-// bots can move, valid directions are: "up", "down", "left", "right"
-// move example:
-// var action = function(surroundings) {
-//   return {"action": "move", "direction": "up"}; // move up
-// }
-// you can inspect your surroundings, which is a 3x3 array
-
-var action = function(surroundings) {
-  // implement this functionality...
-}
-  END
-
-  #name, code, author
-  validates_presence_of :name, :author, :code
-
-  def to_s
-    name
-  end
-
-  def code
-    read_attribute(:code) || SKELETON_CODE
-  end
-
-  def color
-    self.read_attribute("color") || "#%06x" % (rand * 0xffffff)
-  end
-end

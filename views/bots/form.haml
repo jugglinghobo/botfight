@@ -28,8 +28,9 @@
         .cell
           .input-group.color.table{:data => {"color-format" => "hex"}}
             .row
-              %span.input-group-addon.cell{:style => "background-color: #{@bot.color}"}
-                %span.caret
+              .input-group-btn.cell
+                %button.btn.btn-default.dropdown-toggle{:type => "button", :style =>  "background-color: #{@bot.color}", :data => {:toggle => "dropdown"}}
+                  %span.caret
               %input.bot_color.inline.form-control.cell{:type => "text", :name => "bot[color]", :value => @bot.color}
     %li
       %textarea.bot_code.inline.form-control{:name => "bot[code]"}= @bot.code
