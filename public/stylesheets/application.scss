@@ -35,6 +35,16 @@ label {
   clear: both;
 }
 
+.markdown {
+  font-size: 120%;
+
+  h1, h2, h3, h4, h5, h6 {
+    span {
+      display: none;
+    }
+  }
+}
+
 #footer {
   height: 40px;
 }

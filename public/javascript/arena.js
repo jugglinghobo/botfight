@@ -27,8 +27,7 @@ Arena.prototype.initListeners = function() {
   $("#bot_list").on("click", ".toggle_code", function(e) {
     e.preventDefault();
     var bot_node = $(this).parents(".bot");
-    bot_node.find(".toggle").toggle();
-    bot_node.find(".detoggle").toggle();
+    toggleContent(bot_node);
   });
 
   $("#bot_list").on("click", ".remove_bot", function(e) {
@@ -126,6 +125,7 @@ Arena.prototype.render = function() {
 
 
 Arena.prototype.loadBot = function(bot_id, tile) {
+  var arena = this;
   var load_path = "/bots/"+bot_id+".json";
   var bot = new Bot(this, load_path, tile);
   this.addToBots(bot);
@@ -136,8 +136,7 @@ Arena.prototype.loadBot = function(bot_id, tile) {
     var bot_node = document.getElementById("bot_"+bot.data.id);
     var editor = CodeEditor.initialize({"container": bot_node});
     $("#add_bot option[value="+bot.data.id+"]").remove();
-    $(bot_node).find(".toggle").toggle();
-    $(bot_node).find(".detoggle").toggle();
+    toggleContent($(bot_node));
   });
   return bot;
 };
@@ -231,6 +230,13 @@ Arena.prototype.renderGrid = function() {
 
 Arena.prototype.getCanvas = function() {
   return document.getElementById("arena");
+}
+
+function toggleContent(container) {
+    var visible = container.find(".show");
+    var hidden = container.find(".hidden");
+    visible.removeClass("show").addClass("hidden");
+    hidden.removeClass("hidden").addClass("show");
 }
 
 /**

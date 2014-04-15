@@ -1,16 +1,15 @@
 class Bot < ActiveRecord::Base
 
   SKELETON_CODE = <<-END
-// bots can move, valid directions are: "up", "down", "left", "right"
-// move example:
-// var action = function(surroundings) {
-//   return {"action": "move", "direction": "up"}; // move up
-// }
-// you can inspect your surroundings, which is a 3x3 array
-
-var action = function(surroundings) {
-  // implement this functionality...
-}
+// returns object of form {"action": <action>, "direction": <direction>}
+// possible actions: "move", "attack"
+// possible directions: "up", "down", "left", "right"
+// example:
+//    return {"action": "move", "direction": "up"};
+action = function(surroundings) {
+  // implement this functionality
+  return null;
+};
   END
 
   after_initialize :set_random_color

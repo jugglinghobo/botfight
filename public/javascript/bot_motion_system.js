@@ -1,10 +1,10 @@
-function BotMovement(bot) {
+function BotMotionSystem(bot) {
   this.bot = bot;
   this.maxHeight = bot.maxWidth();
   this.maxWidth = bot.maxHeight();
 }
 
-BotMovement.prototype.prepareTurn = function() {
+BotMotionSystem.prototype.prepareTurn = function() {
   this.bot.targetTile = this.bot.tile[this.bot.direction]();
   if (!this.bot.targetTile.isOccupied()) {
     return true;
@@ -12,7 +12,7 @@ BotMovement.prototype.prepareTurn = function() {
   return false;
 }
 
-BotMovement.prototype.finishTurn = function() {
+BotMotionSystem.prototype.finishTurn = function() {
   if (this.bot.canExecuteAction) {
     this.bot.tile.removeBot(this.bot);
     this.bot.tile = this.bot.targetTile;
@@ -20,13 +20,13 @@ BotMovement.prototype.finishTurn = function() {
   }
 }
 
-BotMovement.prototype.action = function(progress) {
+BotMotionSystem.prototype.action = function(progress) {
   if (!this.bot.targetTile.isOccupied()) {
     this[this.bot.direction](progress);
   };
 };
 
-BotMovement.prototype.up = function(progress) {
+BotMotionSystem.prototype.up = function(progress) {
   this.bot.y = this.bot.tile.y - this.stepSize(progress);
 
   // overflow handling
@@ -35,7 +35,7 @@ BotMovement.prototype.up = function(progress) {
   };
 };
 
-BotMovement.prototype.down = function(progress) {
+BotMotionSystem.prototype.down = function(progress) {
   this.bot.y = this.bot.tile.y + this.stepSize(progress);
 
   // overflow handling
@@ -44,7 +44,7 @@ BotMovement.prototype.down = function(progress) {
   };
 };
 
-BotMovement.prototype.left = function(progress) {
+BotMotionSystem.prototype.left = function(progress) {
   this.bot.x = this.bot.tile.x - this.stepSize(progress);
 
   // overflow handling
@@ -53,7 +53,7 @@ BotMovement.prototype.left = function(progress) {
   };
 };
 
-BotMovement.prototype.right = function(progress) {
+BotMotionSystem.prototype.right = function(progress) {
   this.bot.x = this.bot.tile.x + this.stepSize(progress);
 
   //overflow handling
@@ -62,11 +62,11 @@ BotMovement.prototype.right = function(progress) {
   };
 };
 
-BotMovement.prototype.stepSize = function(progress) {
+BotMotionSystem.prototype.stepSize = function(progress) {
   return progress * this.bot.tile.size;
 }
 
-BotMovement.prototype.render = function(context) {
+BotMotionSystem.prototype.render = function(context) {
   //var XA = this.bot.targetTile.x+8;
   //var YA = this.bot.targetTile.y+8;
   //var XE = this.bot.targetTile.size-8;

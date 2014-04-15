@@ -25,11 +25,13 @@ end
 
 get "/bots/form" do
   @bot = Bot.new
+  get_manual
   haml :"bots/form"
 end
 
 post "/bots/create" do
   @bot = Bot.new params[:bot]
+  get_manual
   if @bot.save
     redirect to "/bots/#{@bot.id}/edit"
   else
@@ -44,11 +46,13 @@ end
 
 get "/bots/:id/edit" do
   get_bot
+  get_manual
   haml :"bots/form"
 end
 
 post "/bots/:id/update" do
   get_bot
+  get_manual
   if @bot.update_attributes params[:bot]
     redirect to "/bots/#{@bot.id}/edit"
   else
@@ -58,11 +62,8 @@ end
 
 post "/bots/:id/delete" do
   get_bot
-  if @bot.destroy
-    redirect to "/arena"
-  else
-    redirect to "/arena"
-  end
+  @bot.destroy
+  redirect to "/arena"
 end
 
 get "/bots/:id" do
@@ -72,6 +73,10 @@ end
 
 def get_bot
   @bot = Bot.find params[:id]
+end
+
+def get_manual
+  @manual = File.open("#{File.dirname(__FILE__)}/views/manual.md", "rb").read
 end
 
 # sass stylesheet hack

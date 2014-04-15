@@ -18,7 +18,7 @@ function Bot(arena, loadPath, tile) {
 
   this.data = new BotData(loadPath)
   this.brain = new BotBrain(this.data.code);
-  this.modules = {"move": new BotMovement(this), "attack": new BotWeaponSystem(this)};
+  this.modules = {"move": new BotMotionSystem(this), "attack": new BotWeaponSystem(this)};
 };
 
 Bot.prototype.prepareTurn = function() {
