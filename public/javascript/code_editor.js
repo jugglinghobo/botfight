@@ -5,7 +5,7 @@ $(document).ready(function() {
 var CodeEditor = function() {
   var initCodeEditor = function(options) {
     var options = options || {};
-    var editor_class = options["editor_class"] || "bot_code";
+    var editorClass = options["editor_class"] || "bot_code";
     var container = options["container"] || document;
     var opts = opts || {};
     //opts["keyMap"] = opts["keyMap"] || "vim";
@@ -15,7 +15,7 @@ var CodeEditor = function() {
     opts["readOnly"] = opts["readOnly"] || false;
     opts["tabSize"] = opts["tabSize"] || 2;
 
-    var codeMirrorAreas = container.getElementsByClassName(editor_class);
+    var codeMirrorAreas = container.getElementsByClassName(editorClass);
     var editors = {};
     for (var i = 0; i < codeMirrorAreas.length; ++i) {
       var codeMirrorArea = codeMirrorAreas[i];
@@ -23,9 +23,9 @@ var CodeEditor = function() {
       opts["readOnly"] = data ? data["readonly"] : opts["readonly"];
 
       var editor = CodeMirror.fromTextArea(codeMirrorArea, opts);
-      var bot_div = $(codeMirrorArea).parents(".bot").attr("id");
-      var bot_id = bot_div.match(/\d+/)[0];
-      editors[bot_id] = editor;
+      var botNode = $(codeMirrorArea).parents(".bot");
+      var botId = botNode.find(".bot_id").val();
+      editors[botId] = editor;
     }
     return editors;
   };

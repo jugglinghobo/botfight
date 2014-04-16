@@ -31,8 +31,12 @@ label {
   display: inline-block;
 }
 
-.clearfix {
-  clear: both;
+.right {
+  text-align: right;
+}
+
+.spacer {
+  margin: 5px 0;
 }
 
 .markdown {

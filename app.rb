@@ -50,6 +50,19 @@ get "/bots/:id/edit" do
   haml :"bots/form"
 end
 
+post "/bots/:id/update.json" do
+  get_bot
+  get_manual
+  if @bot.update_attributes params[:bot]
+    puts "UPDATED"
+    puts @bot.code.inspect
+    @bot.to_json
+  else
+    puts @bot.inspect
+    {:status => "error", :code => 500}.to_json
+  end
+end
+
 post "/bots/:id/update" do
   get_bot
   get_manual
