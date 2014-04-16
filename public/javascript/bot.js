@@ -7,6 +7,7 @@ function Bot(arena, loadPath, tile) {
 
   this.x = this.tile.x;
   this.y = this.tile.y;
+  this.rotation;
   this.width = arena.tileSize;
   this.height = arena.tileSize;
 
@@ -26,11 +27,14 @@ Bot.prototype.prepareTurn = function() {
   var actionHash = this.brain.action(surroundings);
   this.action = actionHash["action"];
   this.direction = actionHash["direction"];
+  this.rotation = this.rotationForDirection(this.direction);
   this.canExecuteAction = this.modules[this.action].prepareTurn();
 }
 
 Bot.prototype.finishTurn = function() {
-  this.modules[this.action].finishTurn();
+  if (this.canExecuteAction) {
+    this.modules[this.action].finishTurn();
+  }
   this.canExecuteAction = false;
 }
 
@@ -65,26 +69,27 @@ Bot.prototype.maxHeight = function() {
 }
 
 Bot.prototype.render = function(context) {
-  if (this.direction) {
-    this.modules[this.action].render(context);
-  }
-  // render self
-  var rad = this.radiansForDirection();
+  var rad = this.rotation*Math.PI/180;
   var offsetX = this.width/2;
   var offsetY = this.height/2;
+  var tileOffset = this.tile.size/2;
   var centerX = this.x+offsetX;
   var centerY = this.y+offsetY;
-  context.fillStyle = this.data.color;
-  context.fillRect(this.tile.x, this.tile.y, this.tile.size, this.tile.size);
-  context.fillStyle = "black";
   context.save();
   context.translate(centerX, centerY);
+  // draw color floor
+  context.fillStyle = this.data.color;
+  context.fillRect(0-tileOffset, 0-tileOffset, this.tile.size, this.tile.size);
+  context.fillStyle = "black";
+
   context.rotate(rad);
+
+  // draw bot icon
   context.drawImage(this.data.icon, 0-(offsetX-this.data.offset), 0-(offsetY-this.data.offset));
   context.restore();
 }
 
-Bot.prototype.radiansForDirection = function() {
-  var degrees = {"up": 0, "down": 180, "left": 270, "right": 90};
-  return degrees[this.direction]*Math.PI/180;
+Bot.prototype.rotationForDirection = function() {
+  var rotation = {"up": 0, "down": 180, "left": 270, "right": 90};
+  return rotation[this.direction];
 }

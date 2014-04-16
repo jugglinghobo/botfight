@@ -172,10 +172,7 @@ Arena.prototype.loadBot = function(botId, oldBot) {
 
   var arena = this;
   $.get(botPath+".html", function(botHtml) {
-    console.log(bot);
-    console.log(botId);
     var botNode = document.getElementById("bot_"+bot.data.id);
-    console.log(botNode);
     if (oldBot) {
       $(botNode).replaceWith(botHtml);
     } else {
@@ -184,7 +181,7 @@ Arena.prototype.loadBot = function(botId, oldBot) {
     // resetting because content changed
     var botNode = document.getElementById("bot_"+bot.data.id);
     var editor = CodeEditor.initialize({"container": botNode});
-    $("#add_bot option[value="+bot.id+"]").remove();
+    $("#add_bot option[value="+bot.data.id+"]").remove();
 
     if (!oldBot) {
       toggleContent($(botNode));

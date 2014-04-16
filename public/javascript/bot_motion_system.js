@@ -65,14 +65,3 @@ BotMotionSystem.prototype.right = function(progress) {
 BotMotionSystem.prototype.stepSize = function(progress) {
   return progress * this.bot.tile.size;
 }
-
-BotMotionSystem.prototype.render = function(context) {
-  //var XA = this.bot.targetTile.x+8;
-  //var YA = this.bot.targetTile.y+8;
-  //var XE = this.bot.targetTile.size-8;
-  //var YE = this.bot.targetTile.size-8;
-  //context.fillStyle = "white";
-  //context.fillRect(XA, YA, XE, YE);
-  //context.fillStyle = "black";
-}
-
