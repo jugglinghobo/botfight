@@ -172,14 +172,14 @@ Arena.prototype.loadBot = function(botId, oldBot) {
 
   var arena = this;
   $.get(botPath+".html", function(botHtml) {
-    var botNode = document.getElementById("bot_"+bot.data.id);
+    var botNode = getBotNode(bot);
     if (oldBot) {
       $(botNode).replaceWith(botHtml);
     } else {
       $("#bot_list").prepend(botHtml);
     }
     // resetting because content changed
-    var botNode = document.getElementById("bot_"+bot.data.id);
+    var botNode = getBotNode(bot);
     var editor = CodeEditor.initialize({"container": botNode});
     $("#add_bot option[value="+bot.data.id+"]").remove();
 
@@ -209,6 +209,12 @@ Arena.prototype.removeBot = function(botId, removeHtml) {
   return bot;
 }
 
+Arena.prototype.destroyBot = function(bot) {
+  this.removeBot(bot.data.id, false);
+  var botNode = getBotNode(bot);
+  $(botNode).find(".destroyed").toggle(true);
+}
+
 Arena.prototype.addToBots = function(bot) {
   this.bots.push(bot);
 };
@@ -227,11 +233,14 @@ Arena.prototype.getBot = function(botId) {
 
 Arena.prototype.updateActiveBot = function() {
   this.activeBot = this.bots.shift();
+  if (this.activeBot.destroyed) {
+    return false;
+  };
   if (this.activeBot) {
     this.bots.push(this.activeBot);
   } else {
     this.stopGame();
-  }
+  };
   return this.activeBot;
 }
 
@@ -290,10 +299,8 @@ Arena.prototype.getCanvas = function() {
   return document.getElementById("arena");
 }
 
-function getCodeEditor(container) {
-  //Get a reference to the CodeMirror editor
-  var editor = $(container).find('.CodeMirror')[0].CodeMirror;
-  return editor;
+function getBotNode(bot) {
+  return document.getElementById("bot_"+bot.data.id);
 }
 
 function toggleContent(container) {

@@ -14,8 +14,9 @@ function Bot(arena, loadPath, tile) {
   this.action;
   this.direction;
   this.canExecuteAction;
+  this.destroyed = false;
 
-  this.lives = 3;
+  this.lives = 1;
 
   this.data = new BotData(loadPath)
   this.brain = new BotBrain(this.data.code);
@@ -52,7 +53,8 @@ Bot.prototype.takeDamage = function(damage) {
 }
 
 Bot.prototype.die = function() {
-  arena.removeBot(this.data.id);
+  this.destroyed = true;
+  arena.destroyBot(this);
 }
 
 Bot.prototype.resetPosition = function() {

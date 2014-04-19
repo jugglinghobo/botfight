@@ -21,6 +21,10 @@ action = function(surroundings) {
     name
   end
 
+  def name
+    truncate read_attribute(:name)
+  end
+
   def code
     read_attribute(:code) || SKELETON_CODE
   end
@@ -28,5 +32,13 @@ action = function(surroundings) {
   private
   def set_random_color
     self.color ||= "#%06x" % (rand * 0xffffff)
+  end
+
+  def truncate(string, length = 25)
+    if string.length > length
+      "#{string[0..length-4].strip}..."
+    else
+      string
+    end
   end
 end
