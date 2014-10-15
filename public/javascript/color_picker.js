@@ -13,14 +13,9 @@ var ColorPicker = function() {
     });
   }
 
-  var initListeners = function() {
-
-  }
-
   return {
     initialize: function() {
       initColorPicker();
-      initListeners();
     }
   }
 }();

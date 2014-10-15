@@ -3,8 +3,8 @@ $(document).ready(function() {
 });
 
 function Arena(gridWidth, gridHeight, tileSize) {
-  this.gridWidth = gridWidth || 5;
-  this.gridHeight = gridHeight || 5;
+  this.gridWidth = gridWidth || 10;
+  this.gridHeight = gridHeight || 10;
   this.tileSize = tileSize || 30;
   this.width = this.gridWidth * this.tileSize;
   this.height = this.gridHeight * this.tileSize;

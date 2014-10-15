@@ -16,7 +16,7 @@ function Bot(arena, loadPath, tile) {
   this.canExecuteAction;
   this.destroyed = false;
 
-  this.lives = 1;
+  this.lives = 3;
 
   this.data = new BotData(loadPath)
   this.brain = new BotBrain(this.data.code);
